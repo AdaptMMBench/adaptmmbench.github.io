@@ -3,29 +3,43 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="description"
-    content="AdaptMMBench: Benchmarking Adaptive Multimodal Reasoning for Mode Selection and Reasoning Process">
-  <meta name="keywords" content="MMSearch">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> AdaptMMBench: Benchmarking Adaptive Multimodal Reasoning for Mode Selection and Reasoning Process</title>
+  <title>Adaptive Chain-of-Focus Reasoning via Dynamic Visual Search and Zooming for Efficient VLMs</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script> -->
-  <!-- <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-/Users/panlu/Library/Mobile Documents/com~apple~CloudDocs/ImageMath/visual-mathqa-server/data_final/images
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
-  </script> -->
-
-  <!-- <link rel="icon" href=""> -->
+  <!-- 添加favicon -->
+  <!-- <link rel="icon" type="image/x-icon" href="assets/images/icon.png"> -->
+  <!-- 或者使用PNG格式 -->
   <link rel="icon" type="image/png" href="assets/images/icon.png">
 
+  <script>
+    var task_map = {
+      "simple-object-manipulation": "simple_object_manipulation",
+      "visual-goal-reaching": "visual_goal_reaching",
+      "novel-concept-grounding": "novel_concept_grounding",
+      "one-shot-video-imitation": "one_shot_video_imitation",
+      "visual-constraint-satisfaction": "visual_constraint_satisfaction",
+      "visual-reasoning": "visual_reasoning"
+    };
+
+    function updateDemoVideo(category) {
+      // var demo = document.getElementById("single-menu-demos").value;
+      var task = document.getElementById(category + "-menu-tasks").value;
+      var inst = document.getElementById(category + "-menu-instances").value;
+
+      console.log(task_map[category], task, inst)
+
+      var video = document.getElementById(category + "-single-task-video");
+      video.src = "assets/videos/demos/" +
+        task_map[category] +
+        "/" +
+        task +
+        "/" +
+        inst +
+        ".mp4";
+      video.playbackRate = 2.0;
+      video.play();
+    }
+  </script>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
@@ -33,93 +47,59 @@
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/academicons.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="stylesheet" href="./static/css/leaderboard.css">
 
-  <!-- <link href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css" rel="stylesheet">
-  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script> -->
-  <script type="text/javascript" src="static/js/sort-table.js" defer></script>
+  <style>
+    .content.has-text-justified p,
+    .content.has-text-justified ul,
+    .content.has-text-justified ol {
+      font-size: 120%;
+      /* 可以调整这个百分比来改变大小 */
+    }
+
+    .content.has-text-justified li {
+      font-size: inherit;
+      /* 继承父元素的字体大小 */
+    }
+
+    .hover-card p,
+    .hover-card ul,
+    .hover-card ol {
+      font-size: 120%;
+    }
+
+    .hover-card li {
+      font-size: inherit;
+    }
+  </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/explorer-index.js"></script>
-  <script src="./static/js/question_card.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <script src="./static/js/leaderboard_testmini.js"></script>
-  <script src="./data/results/output_folders.js" defer></script>
-  <script src="./data/results/model_scores.js" defer></script>
-
-  <script src="./visualizer/data/data_public.js" defer></script>
-
-  <style>
-    .icml-label {
-      color: red;
-      font-weight: bold;
-      margin-top: 0.5rem;
-      font-size: 1.5rem;
-    }
-  </style>
 </head>
 
 <body>
 
-  <!-- <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-    <div class="navbar-menu">
-      <div class="navbar-start" style="flex-grow: 1; justify-content: center;"> -->
-  <!-- <a class="navbar-item" href="https://keunhong.com">
-      <span class="icon">
-          <i class="fas fa-home"></i>
-      </span>
-      </a> -->
-  <!-- @PAN TODO: consider adding links? -->
-  <!-- <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            More Research
-          </a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="https://arxiv.org/pdf/2411.15296">
-              <b>MME-Survey</b>
-              <p style="font-size:18px; display: inline; margin-left: 5px;">🔥</p>
-            </a>
-            <a class="navbar-item" href="https://mmsearch.github.io/">
-              <b>MMSearch</b>
-              <p style="font-size:18px; display: inline; margin-left: 5px;">🔥</p>
-            </a>
-            <a class="navbar-item" href="https://mathverse-cuhk.github.io/">
-              <b>MathVerse</b>
-              <p style="font-size:18px; display: inline; margin-left: 5px;">🔥</p>
-            </a>
-            <a class="navbar-item" href="https://github.com/OpenGVLab/LLaMA-Adapter">
-              LLaMA-Adapter (V2) <p style="font-size:18px; display: inline; margin-left: 5px;"></p>
-            </a>
-            <a class="navbar-item" href="https://github.com/OpenGVLab/LLaMA-Adapter/tree/main/imagebind_LLM">
-              ImageBind-LLM
-            </a>
-            <a class="navbar-item" href="https://github.com/ZiyuGuo99/Point-Bind_Point-LLM">
-              Point-Bind & Point-LLM
-            </a>
-            <a class="navbar-item" href="https://github.com/ZrrSkywalker/Personalize-SAM">
-              PerSAM
-            </a>
-            <a class="navbar-item" href="https://caraj7.github.io/comat/">
-              CoMat
-            </a>
-          </div>
-        </div>
-      </div>
 
-    </div>
-  </nav> -->
+
+  <d-contents>
+    <nav>
+      <h4>CONTENTS</h4>
+      <div><a href="#Abstract">Abstract</a></div>
+      <div><a href="#Method">Method</a></div>
+      <div><a href="#Performance">Performance</a></div>
+      <div><a href="#Conclusion">Conclusion</a></div>
+    </nav>
+  </d-contents>
+
+
 
 
   <section class="hero">
@@ -167,6 +147,7 @@
                   <a target="_blank" href="https://liqing.io/">Qing Li</a><sup>2†</sup>
                 </span>
 
+
             </div>
             <div class="is-size-5 publication-authors">
               <span class="author-block"><sup>1</sup>Beijing Key Laboratory of Intelligent Information Technology,
@@ -179,13 +160,12 @@
               <span class="author-block"><sup>*</sup>Equal contribution, <sup>†</sup>Corresponding authors</span>
             </div>
 
-            <!-- <div class="icml-label">ICML2025</div> -->
             <div class="column has-text-centered">
               <div class="publication-links">
                 <!-- PDF Link. -->
                 <span class="link-block">
-                  <!-- @PAN TODO: change links -->
-                  <a href="https://arxiv.org/pdf/2502.09621" class="external-link button is-normal is-rounded is-dark">
+                  <a target="_blank" href="https://arxiv.org/abs/2505.15436"
+                    class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                     </span>
@@ -193,73 +173,75 @@
                   </a>
                 </span>
                 <span class="link-block">
-                  <a href="https://arxiv.org/abs/2502.09621" class="external-link button is-normal is-rounded is-dark">
-                    <!-- <a href="https://arxiv.org/abs/2409.12959"
-                   class="external-link button is-normal is-rounded is-dark"> -->
-                    <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                    </span>
-                    <span>arXiv</span>
-                  </a>
-                </span>
-                <!-- Video Link. -->
-                <!-- <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span> -->
-                <!-- Code Link. -->
-                <span class="link-block">
-                  <a href="https://github.com/CaraJ7/MME-CoT" class="external-link button is-normal is-rounded is-dark">
+                  <a target="_blank" href="https://github.com/xtong-zhang/Chain-of-Focus"
+                    class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fab fa-github"></i>
                     </span>
                     <span>Code</span>
                   </a>
                 </span>
-                <!-- Dataset Link. -->
                 <span class="link-block">
-                  <a href="https://huggingface.co/datasets/CaraJ/MME-CoT"
+                  <a target="_blank" href="https://huggingface.co/xintongzhang/CoF-rl-model-7b"
                     class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
-                      <!-- <i class="far fa-images"></i> -->
-                      <p style="font-size:18px">🤗</p>
-                      <!-- 🔗 -->
+                      <i class="fas fa-robot"></i>
+                    </span>
+                    <span>Model</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a target="_blank" href="https://huggingface.co/datasets/xintongzhang/CoF-SFT-Data-5.4k"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-database"></i>
                     </span>
                     <span>Dataset</span>
                   </a>
                 </span>
-                <!-- Visualization Link. -->
-                <span class="link-block">
-                  <a href="https://huggingface.co/datasets/CaraJ/MME-CoT/viewer"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <p style="font-size:18px">🔮</p>
-                    </span>
-                    <span>Visualize</span>
-                  </a>
-                </span>
-                <!-- Leaderboard Link. -->
-                <span class="link-block">
-                  <a href="https://mmecot.github.io/#leaderboard"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <p style="font-size:18px">🏆</p>
-                    </span>
-                    <span>Leaderboard</span>
-                  </a>
-                </span>
-                <!-- <img src="assets/images/performance.png" class="interpolation-image" alt="" style="display: block; margin-left: auto; margin-right: auto;
-                margin-top: 2rem;
-                width: 1000px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);" /> -->
+
 
                 <img src="assets/images/performance.png" class="interpolation-image" alt="" style="display: block; margin-left: auto; margin-right: auto;
-                width: 600px;" />
+                margin-top: 2rem;
+                width: 1000px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);" />
+
               </div>
+            </div>
+          </div>
+        </div>
+  </section>
+
+
+
+
+  <section class="hero is-light" id="Abstract">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column">
+            <h2 class="title is-3 custom-heading">Abstract</h2>
+            <div class="content has-text-justified">
+              <!-- <img src="assets/images/teaser.jpg" class="interpolation-image"
+               alt="" style="display: block; margin-left: auto; margin-right: auto" width="900"/> -->
+              <p style="font-size: 125%">
+                Adaptive multimodal reasoning has emerged as a promising frontier in Vision-Language Models (VLMs),
+                aiming to dynamically modulate between tool-augmented visual reasoning and text reasoning to enhance
+                both effectiveness and efficiency. However, existing evaluations rely on static difficulty labels and
+                simplistic metrics, which fail to capture the dynamic nature of difficulty relative to varying model
+                capacities. Consequently, they obscure the distinction between adaptive mode selection and general
+                performance while neglecting fine-grained process analyses. In this paper, we propose AdaptMMBench, a
+                comprehensive benchmark for adaptive multimodal reasoning across five domains: real-world, OCR, GUI,
+                knowledge, and math, encompassing both direct perception and complex reasoning tasks. AdaptMMBench
+                utilizes a Matthews Correlation Coefficient (MCC) metric to evaluate the selection rationality of
+                different reasoning modes, isolating this meta-cognition ability by dynamically identifying task
+                difficulties based on models' capability boundaries. Moreover, AdaptMMBench facilitates
+                multi-dimensional process evaluation across key step coverage, tool effectiveness, and computational
+                efficiency. Our evaluation reveals that while adaptive mode selection scales with model capacity, it
+                notably decouples from final accuracy. Conversely, key step coverage aligns with performance, though
+                tool effectiveness remains highly inconsistent across model architectures.
+              </p>
             </div>
           </div>
         </div>
@@ -269,591 +251,374 @@
 
 
 
-  <section class=" section">
-    <div class="container" style="margin-bottom: 2vh;">
-      <!-- Abstract. -->
+
+
+  <section class="section" id="Method">
+    <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Introduction</h2>
+        <div class="column">
+          <!-- <h2 class="title is-3" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Method</h2> -->
+
+          <h2 class="title is-3 section-title" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Method</h2>
+          <hr class="section-line">
+
           <div class="content has-text-justified">
-            Adaptive multimodal reasoning has emerged as a promising frontier in Vision-Language Models
-            (VLMs), aiming
-            to dynamically modulate between tool-augmented visual reasoning and text reasoning to enhance
-            both
-            effectiveness and efficiency. However, existing evaluations rely on static difficulty labels and
-            simplistic
-            metrics, which fail to capture the dynamic nature of difficulty relative to varying model
-            capacities.
-            Consequently, they obscure the distinction between adaptive mode selection and general
-            performance while
-            neglecting fine-grained process analyses. In this paper, we propose \bench, a comprehensive
-            benchmark for
-            adaptive multimodal reasoning across five domains: real-world, OCR, GUI, knowledge, and math,
-            encompassing
-            both direct perception and complex reasoning tasks. \bench\ utilizes a Matthews Correlation
-            Coefficient
-            (MCC) metric to evaluate the selection rationality of different reasoning modes, isolating this
-            meta-cognition ability by dynamically identifying task difficulties based on models' capability
-            boundaries.
-            Moreover, \bench\ facilitates multi-dimensional process evaluation across key step coverage,
-            tool
-            effectiveness, and computational efficiency. Our evaluation reveals that while adaptive mode
-            selection
-            scales with model capacity, it notably decouples from final accuracy. Conversely, key step
-            coverage aligns
-            with performance, though tool effectiveness remains highly inconsistent across model
-            architectures.
+            <img src="assets/images/visual_agent.jpg" class="interpolation-image" alt=""
+              style="display: block; margin-left: auto; margin-right: auto" width="900" />
+            <p>
+              We build a visual search agent based on the ReAct framework, which solves problems iteratively through a
+              Thought-Action loop. When executing visual search tasks, the agent employs a specific strategy of
+              progressive $\text{zoom-in}$ or refinement via tool execution (e.g., image processing or focusing
+              operations). This method enables the agent to acquire more precise, authentic, and valuable search data to
+              guide subsequent reasoning and decision steps.
+            </p>
+          </div>
+
+          <div class="content has-text-justified">
+            <img src="assets/images/model_inference.jpg" class="interpolation-image" alt=""
+              style="display: block; margin-left: auto; margin-right: auto" width="900" />
+            <div class="content has-text-justified">
+              <div class="content has-text-justified hover-card" style="padding: 1.5rem;">
+                <p>The <strong>Chain-of-Focus (CoF)</strong> method enables VLMs to perform adaptive search and zooming
+                  in on key image regions, thereby creating a chain of focus steps for multimodal reasoning with
+                  gradually obtained visual cues.</p>
+                <ol>
+                  <li>When the given image is <strong>high-resolution</strong> and uses a large number of visual tokens,
+                    or when the question depends on a large region of the image, the extracted visual tokens are often
+                    sufficient to answer the question directly.
+                  <li>When the image is <strong>low-resolution</strong> with fewer visual tokens, or when the question
+                    demands details from small regions of the image, the visual tokens may not provide enough cues. In
+                    this case, the model should search for and zoom in on key image regions to extract more visual cues.
+                </ol>
+                <p>In implementation, the visual tokens corresponding to key regions are appended to previously
+                  generated output tokens for subsequent outputs during a single generation round. This approach allows
+                  the VLMs to gather more visual cues, enabling them to analyze the image more thoroughly, accurately,
+                  and reliably than if they only relied on a static view of the image. </p>
+
+                <p><span style="color:#6a7bff; font-weight:bold;">Note </span> that our method does not perform visual
+                  search and zooming for every image, but performs adaptive search and zooming based on obtained visual
+                  cues, reducing the cost while keeping the performance.</p>
+              </div>
+              <img src="assets/images/agent.jpg" class="interpolation-image" alt=""
+                style="display: block; margin-left: auto; margin-right: auto" width="900" />
+              <div class="content has-text-justified">
+                <div class="content has-text-justified hover-card" style="padding: 1.5rem;">
+                  <p>CoF adopts a two-stage training pipeline.</p>
+                  <p><span style="color:#6a7bff; font-weight:bold;">In the SFT stage</span>, we construct the MM-CoF
+                    dataset with 5K samples from the SAM dataset across diverse resolutions. For each image, we
+                    synthesize a task and use a visual agent with multiple tools to search and reason until task
+                    completion. The agent's reasoning steps are then summarized into a CoF process by an LLM. We
+                    fine-tune a Qwen2.5-VL-7B model on MM-CoF for cold start.</p>
+                  <p><span style="color:#ff6b6b; font-weight:bold;">In the RL stage</span>, we leverage the outcome
+                    accuracies and formats as rewards to update the VLMs, enabling further refining the model’s search
+                    and reasoning strategy without human priors. We denote the obtained model as Qwen2.5-VL-7B-CoF.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="content has-text-centered">
-        <img src="static/images/overview_mv/image/radar.jpg" alt="grade-lv" width="40%" />
-        <p>Chain-of-Thought Performance of Leading LMMs on <span class="mathvista">MME-CoT</span>.</p>
-      </div>
-    </div>
   </section>
 
-  <section class="section">
-    <div class="container">
 
-      <div class="columns is-centered">
-        <div class="column is-full has-text-centered content">
-          <h2 class="title is-3" id="leaderboard">Leaderboard</h2>
-          <div class="content">
-            <table class="js-sort-table" id="results">
-              <thead>
-                <tr>
-                  <th rowspan="2" style="vertical-align: middle;"><strong>#</strong></th>
-                  <th rowspan="2" style="vertical-align: middle;"><strong>Model</strong></th>
-                  <th colspan="3" style="vertical-align: middle;"><strong>CoT Quality</strong></th>
-                  <th colspan="3" style="vertical-align: middle;"><strong>CoT Robustness</strong></th>
-                  <th colspan="3" style="vertical-align: middle;"><strong>CoT Efficiency</strong></th>
-                </tr>
-                <tr>
-                  <th><strong><u>F1 Score</u></strong></th>
-                  <th><strong>Precision</strong></th>
-                  <th><strong>Recall</strong></th>
-                  <th><strong><u>Avg. Score</u></strong></th>
-                  <th><strong>Stability</strong></th>
-                  <th><strong>Efficacy</strong></th>
-                  <th><strong><u>Avg. Score</u></strong></th>
-                  <th><strong>Relevance Rate</strong></th>
-                  <th><strong>Reflection Quality</strong></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><b class="best-score-text">Kimi k1.5 🥇</b></td>
-                  <td><b>64.2</b></td>
-                  <td>92.0</td>
-                  <td>49.3</td>
-                  <td><b>1.4</b></td>
-                  <td>2.9</td>
-                  <td>0.0</td>
-                  <td><b>82.2</b></td>
-                  <td>92.2</td>
-                  <td>72.2</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td><b class="best-score-text">JT-VL-Chat 🥈</b></td>
-                  <td><b>64.1</b></td>
-                  <td>89.6</td>
-                  <td>49.9</td>
-                  <td><b>-1.8</b></td>
-                  <td>-7.2</td>
-                  <td>3.6</td>
-                  <td><b>77.6</b></td>
-                  <td>92.0</td>
-                  <td>63.3</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td><b class="best-score-text">GPT-4o 🥉</b></td>
-                  <td><b>64.0</b></td>
-                  <td>85.4</td>
-                  <td>51.2</td>
-                  <td><b>2.1</b></td>
-                  <td>-1.0</td>
-                  <td>5.1</td>
-                  <td><b>96.0</b></td>
-                  <td>92.0</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td><b class="">QVQ-72B</b></td>
-                  <td><b>62.0</b></td>
-                  <td>80.2</td>
-                  <td>50.5</td>
-                  <td><b>-1.8</b></td>
-                  <td>-3.1</td>
-                  <td>-0.4</td>
-                  <td><b>67.9</b></td>
-                  <td>83.7</td>
-                  <td>61.7</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td><b class="">Virgo-72B</b></td>
-                  <td><b>60.8</b></td>
-                  <td>79.5</td>
-                  <td>49.2</td>
-                  <td><b>-2.3</b></td>
-                  <td>-1.7</td>
-                  <td>-2.9</td>
-                  <td><b>75.3</b></td>
-                  <td>90.6</td>
-                  <td>60.6</td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td><b class="">Qwen2-VL-72B</b></td>
-                  <td><b>56.2</b></td>
-                  <td>77.3</td>
-                  <td>44.2</td>
-                  <td><b>-2.1</b></td>
-                  <td>-6.5</td>
-                  <td>2.4</td>
-                  <td><b>96.5</b></td>
-                  <td>92.9</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td><b class="">InternVL2.5-78B-MPO</b></td>
-                  <td><b>52.7</b></td>
-                  <td>73.6</td>
-                  <td>41.1</td>
-                  <td><b>0.2</b></td>
-                  <td>-2.0</td>
-                  <td>2.4</td>
-                  <td><b>95.3</b></td>
-                  <td>90.6</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td><b class="">InternVL2.5-8B-MPO</b></td>
-                  <td><b>43.0</b></td>
-                  <td>60.4</td>
-                  <td>33.4</td>
-                  <td><b>0.6</b></td>
-                  <td>0.3</td>
-                  <td>0.9</td>
-                  <td><b>94.7</b></td>
-                  <td>89.3</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td><b class="">Qwen2-VL-7B</b></td>
-                  <td><b>42.1</b></td>
-                  <td>61.6</td>
-                  <td>32.0</td>
-                  <td><b>-4.0</b></td>
-                  <td>-3.1</td>
-                  <td>-4.8</td>
-                  <td><b>94.9</b></td>
-                  <td>89.8</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td><b class="">InternVL2.5-8B</b></td>
-                  <td><b>41.1</b></td>
-                  <td>60.0</td>
-                  <td>31.3</td>
-                  <td><b>-3.0</b></td>
-                  <td>-6.8</td>
-                  <td>0.9</td>
-                  <td><b>98.4</b></td>
-                  <td>96.8</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>11</td>
-                  <td><b class="">MiniCPM-V-2.6</b></td>
-                  <td><b>39.8</b></td>
-                  <td>57.3</td>
-                  <td>30.5</td>
-                  <td><b>-3.5</b></td>
-                  <td>-4.8</td>
-                  <td>-2.2</td>
-                  <td><b>92.8</b></td>
-                  <td>85.7</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>12</td>
-                  <td><b class="">LLaVA-OV-72B</b></td>
-                  <td><b>36.3</b></td>
-                  <td>57.3</td>
-                  <td>26.6</td>
-                  <td><b>-0.2</b></td>
-                  <td>0.3</td>
-                  <td>-0.6</td>
-                  <td><b>95.4</b></td>
-                  <td>90.8</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>13</td>
-                  <td><b class="">LLaVA-CoT</b></td>
-                  <td><b>34.9</b></td>
-                  <td>53.9</td>
-                  <td>25.8</td>
-                  <td><b>0.4</b></td>
-                  <td>1.4</td>
-                  <td>-0.6</td>
-                  <td><b>94.0</b></td>
-                  <td>88.1</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>14</td>
-                  <td><b class="">LLaVA-OV-7B</b></td>
-                  <td><b>30.9</b></td>
-                  <td>50.9</td>
-                  <td>22.2</td>
-                  <td><b>-3.4</b></td>
-                  <td>-3.8</td>
-                  <td>-3.0</td>
-                  <td><b>91.5</b></td>
-                  <td>83.0</td>
-                  <td>100.0</td>
-                </tr>
-                <tr>
-                  <td>15</td>
-                  <td><b class="">Mulberry</b></td>
-                  <td><b>27.4</b></td>
-                  <td>59.1</td>
-                  <td>17.8</td>
-                  <td><b>3.5</b></td>
-                  <td>4.4</td>
-                  <td>2.6</td>
-                  <td><b>89.5</b></td>
-                  <td>79.0</td>
-                  <td>100.0</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
 
-      <!-- </div> -->
-      <!-- </div> -->
+  <!-- <hr style="width: 60%; border-top: 1px solid #e0e0e0; margin: 40px auto;"> -->
 
-    </div>
-  </section>
-
-  <!-- DATASET SECTION -->
-  <section class="hero is-light is-small">
-    <div class="hero-body has-text-centered">
-      <!-- <h1 class="title is-1 mathvista"><img src="static/images/logo.png" style="width:1.0em;vertical-align: middle" alt="Logo"/>MathVista Dataset</h1> -->
-      <h1 class="title is-1 mathvista">
-        <span class="mathvista" style="vertical-align: middle">MME-CoT Dataset</span>
-      </h1>
-    </div>
-  </section>
-
-  <!-- <section class="section">
-  <div class="container" style="margin-bottom: 2vh;">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Introduction</h2>
-        <div class="content has-text-justified">
-          <p> -->
-
-  <section class="section">
-    <div class="container">
+  <section class="section" id="Performance">
+    <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
-        <!-- <div class="column is-full-width has-text-centered"> -->
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Overview</h2>
-          <div class="content has-text-justified">
-            <p>
-              <span class="mathvista">MME-CoT </span>composes <b>6 major domains with 17 subcategories</b>. To
-              facilitate CoT evaluation, we provide key steps annotation and reference image captions for all the
-              reasoning questions. The annotation and reference captions are all human annotated and verified. In
-              addition, we incorporate a variety of perception tasks along with the reasoning tasks in the benchmark for
-              a comprehensive evaluation. In total, MME-CoT contains <b>1,130 questions with 3,865 key step
-                annotation</b>.
-            </p>
-            <p>
-              Unlike the simplistic metrics used in previous studies, MME-CoT introduces a rigorous evaluation framework
-              that delves into the fine-grained CoT process of LMMs, assessing reasoning quality, robustness, and
-              efficiency. Specifically, we address <b>three critical questions</b> as follows:
-              <br>
-              <b>(1)</b> <b>Quality:</b> Is each intermediate CoT step logically valid and faithful without
-              hallucination?
-              <br>
-              <b>(2)</b> <b>Robustness:</b> Does CoT interfere with perception tasks, and to what extent does it enhance
-              reasoning tasks?
-              <br>
-              <b>(3)</b> <b>Efficiency:</b> How can we assess the efficiency of CoT in a long reasoning process?
-            </p>
+        <div class="column">
+          <!-- <h2 class="title is-3" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Performance</h2> -->
 
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/overview_mv/image/teaser.jpg" alt="data-overview" style="max-width: 100%;" />
-              </div>
+          <h2 class="title is-3 section-title" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Performance</h2>
+          <hr class="section-line">
+          <h3 class="subsection-title">Adaptive Case Study</h3>
+          <img src="assets/images/adaptive_case_2.png" class="interpolation-image" alt=""
+            style="display: block; margin-left: auto; margin-right: auto; width: 100%; margin-bottom: 1rem;" />
+          <img src="assets/images/adaptive_case_1.png" class="interpolation-image" alt=""
+            style="display: block; margin-left: auto; margin-right: auto; width: 100%;" />
+
+
+          <!-- <div class="content has-text-justified"> -->
+
+          <div class="section-spacer"></div>
+          <h3 class="subsection-title">Visualized Reasoning Cases</h3>
+
+
+          <!-- case 1 -->
+          <div class="columns is-vcentered">
+
+            <!-- img -->
+            <div class="column is-6">
+              <figure class="image">
+                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                <img src="assets/images/case1.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+              </figure>
             </div>
 
-          </div>
-        </div>
-      </div>
-      <div class="columns is-centered">
-        <div class="column" style="margin-right: -30rem;">
-          <div class="content has-text-centered">
-            <img src="static/images/data-composition_ms.jpg" alt="data-overview" style="max-width: 70%;" />
-            <p>
-              Category and subcategory distribution of reasoning and perception tasks in
-              <span class="mathvista">MME-CoT</span>.<br />
-            </p>
-          </div>
-        </div>
-        <div class="column" style="margin-right: -10rem;">
-          <div class="content has-text-centered">
-            <img src="static/images/statistics_ms.jpg" alt="data-overview" style="max-width: 30.7%;" />
-            <p>
-              Key statistics of
-              <span class="mathvista">MME-CoT</span>.<br />
-            </p>
-          </div>
-        </div>
-      </div>
 
-      <div class="columns is-centered m-6">
-        <div class="column is-full has-text-centered content">
-          <h2 class="title is-3">Evaluation Strategy</h2>
+            <!-- text -->
+            <div class="column is-6 has-text-left reasoning-block">
+              <p>
+                <strong>Query:</strong> Is the color of the bus red or yellow?<br>
+                (A) yellow<br>
+                (B) red<br>
+                Answer with the option's letter from the given choices directly.
+              </p>
 
+              <p><strong>Output:</strong></p>
 
-          <div id="results-carousel" class="carousel results-carousel">
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/evaluation_mv/quality.jpg" alt="grade-lv" width="97%" />
-                <p>CoT Quality Evaluation. <b>Recall:</b> Measures the <b>informativeness</b> of reasoning steps;
-                  <b>Precision:</b> Evaluates the <b>accuracy</b> of each reasoning step.
-                </p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/evaluation_mv/robustness.jpg" alt="grade-lv" width="52%" />
-                <p>CoT Robustness Evaluation. <b>Effectiveness:</b> Measures if CoT <b>interferes</b> with the
-                  perception tasks;
-                  <b>Efficacy:</b> Evaluates if CoT <b>helps</b> reasoning tasks.
-                </p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/evaluation_mv/effiency.jpg" alt="grade-lv" width="55%" />
-                <p>CoT Efficiency Evaluation. <b>Relevance Rate:</b> Quantifies the proportion of relevant reasoning
-                  steps;
-                  <b>Reflection Quality:</b> Evaluates the model's reflection validity.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              <p class="justified-output">
+                <span class="tag-label">&lt;think&gt;</span>
+                To determine the color of the bus, I need to closely observe the bus in the image.
+                The bus is clearly visible, and its color can be seen distinctly as red.
+                <span class="tag-label">&lt;/think&gt;</span>
+              </p>
 
-
-    </div>
-    </div>
-    </div>
-
-    </div>
-  </section>
-
-  <!-- RESULTS SECTION -->
-  <section class="hero is-light is-small">
-    <div class="hero-body has-text-centered">
-      <h1 class="title is-1 mathvista">Experiment Results</h1>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-
-      <div class="columns is-centered m-6">
-        <div class="column is-full has-text-centered content">
-          <h2 class="title is-3">Error Analysis</h2>
-          <div id="results-carousel" class="carousel results-carousel">
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/result_analysis/error_example.jpg" alt="grade-lv" width="80%" />
-                <p>Examples of reflection errors.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/result_analysis/error_analysis.jpg" alt="grade-lv" width="40%" />
-                <p>Distribution of reflection error types of QVQ-72B.</p>
-              </div>
+              <p><span class="tag-label">&lt;answer&gt;</span> B <span class="tag-label">&lt;/answer&gt;</span></p>
             </div>
 
           </div>
 
 
-        </div>
-      </div>
 
-      <div class="columns is-centered m-6">
-        <div class="column is-full has-text-centered content">
-          <h2 class="title is-3">Visualization Examples</h2>
-          <div id="results-carousel" class="carousel results-carousel">
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img
-                  src="static/images/results_mv/image/pdf2png/precision_recall_example_GPT/precision_recall_example_GPT-1.png"
-                  alt="" width="80%" />
-                <p>Examples of precision and recall evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
+
+
+
+          <!-- case 2 -->
+          <div class="columns is-vcentered">
+
+            <!-- img -->
+            <div class="column is-6">
+              <figure class="image">
+                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                <img src="assets/images/case2.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+              </figure>
             </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img
-                  src="static/images/results_mv/image/pdf2png/precision_recall_example_QVQ/precision_recall_example_QVQ-1.png"
-                  alt="" width="80%" />
-                <p>Examples of precision and recall evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
+
+
+            <!-- text -->
+            <div class="column is-6 has-text-left reasoning-block">
+              <p>
+                <strong>Query:</strong> What is the color of the woman's jacket?<br>
+                (A) black<br>
+                (B) red<br>
+                (C) blue<br>
+                (D) orange<br>
+                Answer with the option's letter from the given choices directly.
+              </p>
+
+              <p><strong>Output:</strong></p>
+
+              <p class="justified-output">
+                <!-- <span class="tag-label">&lt;think&gt;</span>
+                To determine the color of the woman's jacket, I need to closely examine the area where she is located.
+                However, the color details are not immediately clear due to the distance and lighting conditions. To
+                improve visibility, I proceed step by step. I first identify the bounding box corresponding to the
+                woman:
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[570, 1726, 615, 1848]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span>.
+                I zoom in on this area to obtain a refined visual embedding
+                <span class="zoomin-label">&lt;|image_zoomin|&gt;</span>,
+                which reveals that the jacket is light blue.
+                <span class="tag-label">&lt;/think&gt;</span> -->
+                <span class="tag-label">&lt;think&gt;</span>
+                To determine the color of the woman's jacket, I need to closely examine the area where she is located.
+                However, the color details are not immediately clear due to the distance and lighting conditions. To
+                improve visibility, I proceed step by step. I first identify the bounding box corresponding to the
+                woman.
+                <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <div>
+                <span class="tag-label">&lt;tool_call&gt;</span>
+                <pre class="json-content"
+                  style="white-space: pre; font-family: monospace; margin: 0; padding: 0; background: transparent;">{
+  "name": "image_zoom_in_tool",
+  "arguments": {
+    "bbox_2d": [570, 1726, 615, 1848]
+  }
+}</pre>
+                <span class="tag-label">&lt;/tool_call&gt;</span>
               </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img
-                  src="static/images/results_mv/image/pdf2png/precision_recall_example_QVQ2/precision_recall_example_QVQ2-1.png"
-                  alt="" width="80%" />
-                <p>Examples of precision and recall evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img
-                  src="static/images/results_mv/image/pdf2png/precision_recall_example_Qwen/precision_recall_example_Qwen-1.png"
-                  alt="" width="80%" />
-                <p>Examples of precision and recall evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img
-                  src="/Users/cara/0Code/mme-cot/open_source/mme_cot/static/images/results_mv/image/pdf2png/precision_recall_example2_GPT/precision_recall_example2_GPT-1.png"
-                  alt="" width="80%" />
-                <p>Examples of precision and recall evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img
-                  src="/Users/cara/0Code/mme-cot/open_source/mme_cot/static/images/results_mv/image/pdf2png/precision_recall_example2_QVQ/precision_recall_example2_QVQ-1.png"
-                  alt="" width="80%" />
-                <p>Examples of precision and recall evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img
-                  src="/Users/cara/0Code/mme-cot/open_source/mme_cot/static/images/results_mv/image/pdf2png/precision_recall_example2_Qwen/precision_recall_example2_Qwen-1.png"
-                  alt="" width="80%" />
-                <p>Examples of precision and recall evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/results_mv/image/pdf2png/relevance_example_GPT/relevance_example_GPT-1.png"
-                  alt="" width="80%" />
-                <p>Examples of relevance rate evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/results_mv/image/pdf2png/relevance_example_QVQ/relevance_example_QVQ-1.png"
-                  alt="" width="80%" />
-                <p>Examples of relevance rate evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/results_mv/image/pdf2png/relevance_example_Qwen/relevance_example_Qwen-1.png"
-                  alt="" width="80%" />
-                <p>Examples of relevance rate evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/results_mv/image/pdf2png/ref_example_QVQ/ref_example_QVQ-1.png" alt=""
-                  width="80%" />
-                <p>Examples of reflection quality evaluation results of GPT-4o, QVQ, and Qwen2-VL-7B.</p>
-              </div>
+
+              <p>
+                <span class="tag-label">&lt;think&gt;</span>
+                This reveals that the jacket is light blue.
+                <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <p><span class="tag-label">&lt;answer&gt;</span> C <span class="tag-label">&lt;/answer&gt;</span></p>
             </div>
 
           </div>
-        </div>
-      </div>
 
-    </div>
+
+
+
+
+
+
+
+
+          <!-- case 3 -->
+          <div class="columns is-vcentered">
+
+            <!-- img -->
+            <div class="column is-6">
+              <figure class="image">
+                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                <img src="assets/images/case3.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+              </figure>
+            </div>
+
+
+            <!-- text -->
+            <div class="column is-6 has-text-left reasoning-block">
+              <p>
+                <strong>Query:</strong> What is the color of the lock?<br>
+                (A) yellow<br>
+                (B) silver<br>
+                (C) golden<br>
+                (D) red<br>
+                Answer with the option's letter from the given choices directly.
+              </p>
+
+              <p><strong>Output:</strong></p>
+
+              <!-- <p class="justified-output"> -->
+              <!-- <span class="tag-label">&lt;think&gt;</span>
+                To determine the color of the lock, I need to closely examine the area where the lock is located.
+                However, the lock is not immediately visible, making it difficult to identify its color. To improve
+                visibility, I proceed step by step. I first attempt to locate the lock but find no clear indication due
+                to its small size. I then focus on the red postbox, identifying two bounding boxes:
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[585, 700, 1305, 1821]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span> and
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[645, 920, 1275, 1821]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span>. I analyze these areas but still cannot locate the lock.
+                Next, I shift my attention to the area above the postbox, locating two bounding boxes:
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[0, 600, 1425, 1241]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span> and
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[0, 600, 1425, 1301]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span>. I zoom in on
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[0, 600, 1425, 1241]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span> to obtain a refined visual embedding
+                <span class="zoomin-label">&lt;|image_zoomin|&gt;</span>, which reveals the presence of a mailbox. Upon
+                analyzing this refined area, I confirm that the lock on the mailbox is silver.
+                <span class="tag-label">&lt;/think&gt;</span> -->
+              <!-- </p> -->
+
+              <span class="tag-label">&lt;think&gt;</span>
+              To determine the color of the lock, I need to closely examine the area where the lock is located. However,
+              the lock is not immediately visible, making it difficult to identify its color. To improve visibility, I
+              proceed step by step. I first attempt to locate the lock but find no clear indication due to its small
+              size. I then focus on the red postbox, identifying two bounding boxes: [585, 700, 1305, 1821] and [645,
+              920, 1275, 1821]. I analyze these areas but still cannot locate the lock. Next, I shift my attention to
+              the area above the postbox, locating two bounding boxes: [0, 600, 1425, 1241] and [0, 600, 1425, 1301]. I
+              zoom in the boundingbox.
+              <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <div>
+                <span class="tag-label">&lt;tool_call&gt;</span>
+                <pre class="json-content"
+                  style="white-space: pre; font-family: monospace; margin: 0; padding: 0; background: transparent;">{
+  "name": "image_zoom_in_tool",
+  "arguments": {
+    "bbox_2d": [0, 600, 1425, 1241]
+  }
+}</pre>
+                <span class="tag-label">&lt;/tool_call&gt;</span>
+              </div>
+
+              <p>
+                <span class="tag-label">&lt;think&gt;</span>
+                This reveals the presence of a mailbox.Upon analyzing this refined area, I confirm that the lock on the
+                mailbox is silver.
+                <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <p><span class="tag-label">&lt;answer&gt;</span> B <span class="tag-label">&lt;/answer&gt;</span></p>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
   </section>
 
 
-  <!-- @PAN TODO: bibtex -->
-  <!-- <section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title is-3 has-text-centered">BibTeX</h2>
-    <pre><code>@inproceedings{lu2024mathvista,
-  author    = {Lu, Pan and Bansal, Hritik and Xia, Tony and Liu, Jiacheng and Li, Chunyuan and Hajishirzi, Hannaneh and Cheng, Hao and Chang, Kai-Wei and Galley, Michel and Gao, Jianfeng},
-  title     = {MathVista: Evaluating Mathematical Reasoning of Foundation Models in Visual Contexts},
-  booktitle={International Conference on Learning Representations (ICLR)},
-  year      = {2024}
-}</code></pre>
-  </div>
-</section> -->
-
-  <!-- <section>
-  <div class="section" id="org-banners" style="display:flex">
-    <a href="https://www.cuhk.edu.hk/chinese/index.html" target="_blank" rel="external">
-        <img class="center-block org-banner" src="static/images/cuhk.png">
-    </a>
-  <div class="section" id="org-banners" style="display:flex">
-    <a href="https://www.shlab.org.cn/" target="_blank" rel="external">
-        <img class="center-block org-banner" src="static/images/shlab.png">
-    </a>
-  <div class="section" id="org-banners" style="display:flex">
-    <a href="https://www.ucla.edu/" target="_blank" rel="external">
-        <img class="center-block org-banner" src="static/images/ucla.png">
-    </a>
-    <a href="https://www.washington.edu/" target="blank" class="ext-link">
-        <img class="center-block org-banner" src="static/images/uw.png">
-    </a>
-    <a href="https://www.microsoft.com/en-us/research/" target="_blank" rel="external">
-        <img class="center-block org-banner" src="static/images/microsoft.png">
-    </a>
-  </div>
-</section> -->
 
 
-  <footer class="footer">
-    <!-- <div class="container"> -->
-    <div class="content has-text-centered">
+  <section class="hero is-light" id="Conclusion">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <!-- Generalization Videos -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3 custom-heading">Conclusion</h2>
+            <div class="column">
+              <div class="content has-text-justified">
+                <p style="font-size: 125%">
+                  In this paper, we present adaptive chain-of-focus (Adaptive-CoF), a framework that enables VLMs to
+                  adaptively perform fine-grained visual search and zooming. Through a two-stage training pipeline
+                  combining supervised fine-tuning and reinforcement learning, Adaptive-CoF learns to balance detailed
+                  perception with computational efficiency, overcoming the trade-off between static viewing and
+                  exhaustive zooming. Experiments demonstrate state-of-the-art performance on challenging benchmarks
+                  with significantly reduced computational cost. </p>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-widescreen content">
+      <h2 class="title">BibTeX</h2>
+      <!-- <pre><code>@misc{zhang2025chain,
+      title={Adaptive Chain-of-Focus Reasoning via Dynamic Visual Searchand Zooming for Efficient VLMs}, 
+      author={Xintong Zhang and Zhi Gao and Bofei Zhang and Pengxiang Li and Xiaowen Zhang and Yang Liu and Tao Yuan and Yuwei Wu and Yunde Jia and Song-Chun Zhu and Qing Li},
+      year={2025},
+      eprint={2505.15436},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2505.15436},  -->
+      <pre><code></code>@article{zhang2025chain,
+      title={Adaptive Chain-of-Focus Reasoning via Dynamic Visual Search and Zooming for Efficient VLMs},
+      author = {Zhang, Xintong and Gao, Zhi and Zhang, Bofei and Li, Pengxiang and Zhang, Xiaowen and Liu, Yang and Yuan, Tao and Wu, Yuwei and Jia, Yunde and Zhu, Song-Chun and Qing Li},
+      journal={arXiv preprint arXiv:2505.15436},
+      year={2025}
+      }
+
+ </code></pre>
     </div>
+  </section>
+
+
+  <!-- 
+<footer class="footer">
+  <div class="container">
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
-          <p>
-            This website is adapted from <a href="https://mathverse-cuhk.github.io/">MathVerse</a> and <a
-              href="https://nerfies.github.io/">Nerfies</a>, licensed under a <a rel="license"
-              href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-              Commons Attribution-ShareAlike 4.0 International License</a>.
+          <p> Website borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a> under a <a
+              href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0
+              International</a>
           </p>
         </div>
       </div>
     </div>
-    <!-- </div> -->
-  </footer>
+  </div>
+</footer> -->
+
+  <script src="static/js/contents_bar.js"></script>
+
 
 </body>
 
