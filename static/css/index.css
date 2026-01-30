@@ -457,3 +457,93 @@ d-contents nav>ul>li>a:hover {
     height: 3rem;
     display: block;
 }
+
+/* Leaderboard Table Styles */
+#results {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 20px 0;
+    font-size: 0.95em;
+    font-family: 'Open Sans', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    /* For rounded corners */
+}
+
+#results thead tr {
+    background-color: #f2f2f2;
+    color: #333333;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+#results th,
+#results td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dddddd;
+}
+
+#results th {
+    font-weight: 600;
+    text-transform: none;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+    border-bottom: none;
+    /* Header background handles separation */
+}
+
+/* Specific alignments */
+#results th:first-child,
+#results td:first-child {
+    text-align: center;
+    width: 40px;
+}
+
+#results th:nth-child(2),
+#results td:nth-child(2) {
+    text-align: left;
+    font-weight: 600;
+    color: #2a2a2a;
+}
+
+/* Center align data columns */
+#results th:nth-child(n+3),
+#results td:nth-child(n+3) {
+    text-align: center;
+}
+
+#results tbody tr {
+    background-color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+/* Zebra Striping */
+#results tbody tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover Effect */
+#results tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: default;
+}
+
+/* Last row border removal for rounded corners effect */
+#results tbody tr:last-of-type {
+    border-bottom: 2px solid #4a4a4a;
+}
+
+/* Highlighted/Bold cells specific color tweak if needed */
+#results b {
+    color: #0277bd;
+    /* Darker blue for text readability */
+    background-color: #e1f5fe;
+    /* Light blue background */
+    font-weight: normal;
+    /* Remove bold as requested */
+    padding: 2px 6px;
+    border-radius: 4px;
+}
