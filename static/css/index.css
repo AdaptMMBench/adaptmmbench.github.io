@@ -218,8 +218,8 @@ body {
     /* 内边距 */
     border-radius: 8px;
     /* 圆角 */
-    display: inline-block;
-    /* 让背景只包裹文字 */
+    display: block;
+    /* 让背景占满整行 */
 }
 
 
