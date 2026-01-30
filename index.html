@@ -1138,28 +1138,9 @@
         <div class="column">
           <h2 class="title is-3 custom-heading">Error Analysis</h2>
 
-          <div class="columns is-centered is-vcentered">
-            <div class="column is-5 has-text-centered">
-              <img src="assets/images/error_analysis.png" class="interpolation-image" alt="Error Analysis"
-                style="display: block; margin-left: auto; margin-right: auto; width: 90%;" />
-            </div>
-            <div class="column is-7">
-              <div class="content has-text-justified">
-                <p>
-                  In this section, we analyze the causes of incorrect predictions made by GPT-5 under the adaptive mode
-                  to understand the gap between adaptive reasoning and oracle-visual mode. As shown in the figure, most
-                  errors are related to tool usage. Specifically, 42.3% of the errors stem from visual reasoning
-                  failures, such as zoom-in into incorrect regions or applying wrong image transformations. Another 7.3%
-                  of errors occur even when visual reasoning is correct. Since these samples are solvable in the
-                  oracle-visual mode, this suggests that intermediate images in multi-step reasoning may introduce
-                  visual noise affecting the final prediction. In addition, 8.3% of errors are caused by incorrect mode
-                  selection, where text reasoning is sufficient but the model unnecessarily invokes tools, leading to
-                  degraded performance. For cases without tool usage, forcing tool invocation corrects 7.0% of the
-                  errors, while 6.3% remain incorrect. The remaining 28.8% of errors exceed the capability of the GPT-5
-                  model.
-                </p>
-              </div>
-            </div>
+          <div class="content has-text-justified">
+            <img src="assets/images/error_analysis.png" class="interpolation-image" alt="Error Analysis"
+              style="display: block; margin-left: auto; margin-right: auto; width: 30%;" />
           </div>
 
           <div class="has-text-centered content">
