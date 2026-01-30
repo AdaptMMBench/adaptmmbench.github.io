@@ -23,7 +23,9 @@
     gtag('config', 'G-PYVRSFMDRL');
   </script> -->
 
-  <link rel="icon" href="">
+  <!-- <link rel="icon" href=""> -->
+  <link rel="icon" type="image/png" href="assets/images/icon.png">
+
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
@@ -64,7 +66,7 @@
 
 <body>
 
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <!-- <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
         <span aria-hidden="true"></span>
@@ -73,14 +75,14 @@
       </a>
     </div>
     <div class="navbar-menu">
-      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-        <!-- <a class="navbar-item" href="https://keunhong.com">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;"> -->
+  <!-- <a class="navbar-item" href="https://keunhong.com">
       <span class="icon">
           <i class="fas fa-home"></i>
       </span>
       </a> -->
-        <!-- @PAN TODO: consider adding links? -->
-        <div class="navbar-item has-dropdown is-hoverable">
+  <!-- @PAN TODO: consider adding links? -->
+  <!-- <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             More Research
           </a>
@@ -117,7 +119,7 @@
       </div>
 
     </div>
-  </nav>
+  </nav> -->
 
 
   <section class="hero">
@@ -125,74 +127,58 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title is-bold">
-              <span class="mathvista" style="vertical-align: middle">MME-CoT</span>
-            </h1>
-            <h2 class="subtitle is-3 publication-subtitle">
-              Benchmarking Chain-of-Thought in Large Multimodal Models for Reasoning Quality, Robustness, and Efficiency
-              <!-- <br> -->
-              <!-- with GPT-4V, Bard, and Other Large Multimodal Models -->
-            </h2>
+            <h1 class="title is-2 publication-title">AdaptMMBench: Benchmarking Adaptive Multimodal Reasoning for Mode
+              Selection and Reasoning Process</h1>
+            <!-- <h1 class="title is-2 custom-heading">Chain-of-Focus: Adaptive Visual Search and Zooming for Multimodal Reasoning via RL</h1> -->
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a target="_blank" href="https://github.com/xtong-zhang">Xintong Zhang</a><sup>1,2*</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://adaptmmbench.github.io/">Xiaowen Zhang</a><sup>2,3*</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://adaptmmbench.github.io/">Jongrong Wu</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://zhigao2017.github.io/">Zhi Gao</a><sup>1,2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://adaptmmbench.github.io/">Shilin Yan</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://adaptmmbench.github.io/">Zhenxin Diao</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://adaptmmbench.github.io/">Kunpeng Gao</a><sup>2</sup>
+              </span>
+              <span class="author-block">
+                <span class="author-block">
+                  <a target="_blank" href="https://adaptmmbench.github.io/">Xuanyan Chen</a><sup>2</sup>
+                </span>
+                <span class="author-block">
+                  <a target="_blank" href="https://wu-yuwei-bit.github.io/">Yuwei Wu</a><sup>1,4†</sup>
+                </span>
+                <span class="author-block">
+                  <a target="_blank" href="https://scholar.google.com/citations?user=Sl6TV7gAAAAJ&hl=en">Yunde
+                    Jia</a><sup>4</sup>
+                </span>
+                <span class="author-block">
+                  <a target="_blank" href="https://liqing.io/">Qing Li</a><sup>2†</sup>
+                </span>
 
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <a href="https://caraj7.github.io">Dongzhi Jiang*</a><sup style="color:#6fbf73;">1</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://zrrskywalker.github.io">Renrui Zhang*†</a><sup style="color:#6fbf73;">1</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://ziyuguo99.github.io">Ziyu Guo</a><sup style="color:#9400D3;">2</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://yanwei-li.com/">Yanwei Li<sup>‡</sup></a><sup style="color:#ed4b82;">3</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://github.com/yqi19?tab=repositories ">Yu Qi<sup>‡</sup></a><sup
-                  style="color:#4169E1;">4</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://github.com/xinyan-cxy">Xinyan Chen<sup>‡</sup></a><sup style="color:#6fbf73;">1</sup>
-              </span>
-              <br />
-              <span class="author-block">
-                <a href="">Liuhui Wang<sup>‡</sup></a><sup style="color:#FF8C00;">5</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://github.com/JOKERTONIGHT">Jianhan Jin<sup>‡</sup></a><sup
-                  style="color:#800080;">6</sup>,
-              </span>
-              <span class="author-block">
-                <a href="">Claire Guo<sup>‡</sup></a><sup style="color:#FF1493;">7</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://shenyann.github.io/">Shen Yan</a><sup style="color:#ed4b82;">3</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://bobrown.github.io/boZhang.github.io/">Bo Zhang</a><sup style="color:#4169E1;">8</sup>
-              </span>
-              <br />
-              <span class="author-block">
-                <a href="https://bradyfu.github.io/">Chaoyou Fu</a><sup style="color:#800080;">6</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://gaopengcuhk.github.io/">Peng Gao</a><sup style="color:#4169E1;">8</sup>,
-              </span>
-              <span class="author-block">
-                <a href="https://www.ee.cuhk.edu.hk/~hsli/">Hongsheng Li</a><sup style="color:#6fbf73;">1</sup>
-              </span>
             </div>
             <div class="is-size-5 publication-authors">
-              <span class="author-block"><sup style="color:#6fbf73;">1</sup>CUHK MMLab,</span>
-              <span class="author-block"><sup style="color:#9400D3;">2</sup>CUHK MiuLar Lab,</span>
-              <span class="author-block"><sup style="color:#ed4b82;">3</sup>ByteDance,</span>
-              <span class="author-block"><sup style="color:#4169E1;">4</sup>NEU</span>
-              <br />
-              <span class="author-block"><sup style="color:#FF8C00;">5</sup>UPenn,</span>
-              <span class="author-block"><sup style="color:#800080;">6</sup>NJU,</span>
-              <span class="author-block"><sup style="color:#FF1493;">7</sup>CUHK (Shenzhen),</span>
-              <span class="author-block"><sup style="color:#4169E1;">8</sup>Shanghai AI Laboratory</span>
+              <span class="author-block"><sup>1</sup>Beijing Key Laboratory of Intelligent Information Technology,
+                School of Computer Science & Technology, Beijing Institute of Technology, <sup>2</sup>State Key
+                Laboratory of General Artificial Intelligence, BIGAI, <sup>3</sup>School of Intelligence Science and
+                Technology, Peking University, <sup>4</sup>Guangdong Laboratory of Machine Perception and Intelligent
+                Computing, Shenzhen MSU-BIT University, <sup>5</sup>Department of Automation, Tsinghua University</span>
             </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>*</sup>Equal contribution, <sup>†</sup>Corresponding authors</span>
+            </div>
+
             <!-- <div class="icml-label">ICML2025</div> -->
             <div class="column has-text-centered">
               <div class="publication-links">
