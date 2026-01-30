@@ -212,6 +212,14 @@ body {
     /* 可选字体，或继承 Bulma 默认 */
     letter-spacing: 0.5px;
     /* 稍微拉开字符间距更稳重 */
+    background-color: #f5f5f5;
+    /* 灰色背景 */
+    padding: 15px 30px;
+    /* 内边距 */
+    border-radius: 8px;
+    /* 圆角 */
+    display: inline-block;
+    /* 让背景只包裹文字 */
 }
 
 
