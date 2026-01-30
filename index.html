@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adaptive Chain-of-Focus Reasoning via Dynamic Visual Search and Zooming for Efficient VLMs</title>
+
+  <!-- 添加favicon -->
+  <!-- <link rel="icon" type="image/x-icon" href="assets/images/icon.png"> -->
+  <!-- 或者使用PNG格式 -->
+  <link rel="icon" type="image/png" href="assets/images/icon.png">
+
+  <script>
+    var task_map = {
+      "simple-object-manipulation": "simple_object_manipulation",
+      "visual-goal-reaching": "visual_goal_reaching",
+      "novel-concept-grounding": "novel_concept_grounding",
+      "one-shot-video-imitation": "one_shot_video_imitation",
+      "visual-constraint-satisfaction": "visual_constraint_satisfaction",
+      "visual-reasoning": "visual_reasoning"
+    };
+
+    function updateDemoVideo(category) {
+      // var demo = document.getElementById("single-menu-demos").value;
+      var task = document.getElementById(category + "-menu-tasks").value;
+      var inst = document.getElementById(category + "-menu-instances").value;
+
+      console.log(task_map[category], task, inst)
+
+      var video = document.getElementById(category + "-single-task-video");
+      video.src = "assets/videos/demos/" +
+        task_map[category] +
+        "/" +
+        task +
+        "/" +
+        inst +
+        ".mp4";
+      video.playbackRate = 2.0;
+      video.play();
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <style>
+    .content.has-text-justified p,
+    .content.has-text-justified ul,
+    .content.has-text-justified ol {
+      font-size: 120%;
+      /* 可以调整这个百分比来改变大小 */
+    }
+
+    .content.has-text-justified li {
+      font-size: inherit;
+      /* 继承父元素的字体大小 */
+    }
+
+    .hover-card p,
+    .hover-card ul,
+    .hover-card ol {
+      font-size: 120%;
+    }
+
+    .hover-card li {
+      font-size: inherit;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+
+<body>
+
+
+
+  <d-contents>
+    <nav>
+      <h4>CONTENTS</h4>
+      <div><a href="#Abstract">Abstract</a></div>
+      <div><a href="#Method">Method</a></div>
+      <div><a href="#Performance">Performance</a></div>
+      <div><a href="#Conclusion">Conclusion</a></div>
+    </nav>
+  </d-contents>
+
+
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-2 publication-title">Adaptive Chain-of-Focus Reasoning via Dynamic Visual Search
+              and Zooming for Efficient VLMs</h1>
+            <!-- <h1 class="title is-2 custom-heading">Chain-of-Focus: Adaptive Visual Search and Zooming for Multimodal Reasoning via RL</h1> -->
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a target="_blank" href="https://github.com/xtong-zhang">Xintong Zhang</a><sup>1,2*</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://zhigao2017.github.io/">Zhi Gao</a><sup>2,3*</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://bofei5675.github.io/">Bofei Zhang</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://pengxiang-li.github.io/">Pengxiang Li</a><sup>1,2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://adatwi.github.io/">Xiaowen Zhang</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://adatwi.github.io/">Yang Liu</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://adatwi.github.io/">Tao Yuan</a><sup>2</sup>
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://wu-yuwei-bit.github.io/">Yuwei Wu</a><sup>1,4†</sup>
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://scholar.google.com/citations?user=Sl6TV7gAAAAJ&hl=en">Yunde
+                  Jia</a><sup>4</sup>
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://www.zhusongchun.net/">Song-Chun Zhu</a><sup>2,3,5</sup>
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://liqing.io/">Qing Li</a><sup>2†</sup>
+              </span>
+
+
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Beijing Key Laboratory of Intelligent Information Technology,
+                School of Computer Science & Technology, Beijing Institute of Technology, <sup>2</sup>State Key
+                Laboratory of General Artificial Intelligence, BIGAI, <sup>3</sup>School of Intelligence Science and
+                Technology, Peking University, <sup>4</sup>Guangdong Laboratory of Machine Perception and Intelligent
+                Computing, Shenzhen MSU-BIT University, <sup>5</sup>Department of Automation, Tsinghua University</span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>*</sup>Equal contribution, <sup>†</sup>Corresponding authors</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a target="_blank" href="https://arxiv.org/abs/2505.15436"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a target="_blank" href="https://github.com/xtong-zhang/Chain-of-Focus"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a target="_blank" href="https://huggingface.co/xintongzhang/CoF-rl-model-7b"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-robot"></i>
+                    </span>
+                    <span>Model</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a target="_blank" href="https://huggingface.co/datasets/xintongzhang/CoF-SFT-Data-5.4k"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-database"></i>
+                    </span>
+                    <span>Dataset</span>
+                  </a>
+                </span>
+
+
+                <img src="assets/images/teaser.jpg" class="interpolation-image" alt="" style="display: block; margin-left: auto; margin-right: auto;
+                margin-top: 2rem;
+                width: 1000px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);" />
+
+              </div>
+            </div>
+          </div>
+        </div>
+  </section>
+
+
+
+
+  <section class="hero is-light" id="Abstract">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column">
+            <h2 class="title is-3 custom-heading">Abstract</h2>
+            <div class="content has-text-justified">
+              <!-- <img src="assets/images/teaser.jpg" class="interpolation-image"
+               alt="" style="display: block; margin-left: auto; margin-right: auto" width="900"/> -->
+              <p style="font-size: 125%">
+                <!-- Vision language models (VLMs) have achieved impressive performance across a variety of computer vision
+                tasks. However, the multimodal reasoning capability has not been fully explored in existing models. In
+                this paper, we propose a Chain-of-Focus (CoF) method that allows VLMs to perform adaptive focusing and
+                zooming in on key image regions based on obtained visual cues and the given questions, achieving
+                efficient multimodal reasoning. To enable this CoF capability, we present a two-stage training pipeline,
+                including supervised fine-tuning (SFT) and reinforcement learning (RL). In the SFT stage, we construct
+                the MM-CoF dataset, comprising 3K samples derived from a visual agent designed to adaptively identify
+                key regions to solve visual tasks with different image resolutions and questions. We use MM-CoF to
+                fine-tune the Qwen2.5-VL model for cold start. In the RL stage, we leverage the outcome accuracies and
+                formats as rewards to update the Qwen2.5-VL model, enabling further refining the model's search and
+                reasoning strategy without human priors. Our model achieves significant improvements on multiple
+                benchmarks. On the V* benchmark that requires strong visual reasoning capability, our model outperforms
+                existing VLMs by 5% among 8 image different resolutions ranging from 224 to 4K, demonstrating the
+                effectiveness of the proposed CoF method and facilitating the more efficient deployment of VLMs in
+                practical applications. -->
+                Vision Language Models (VLMs) have achieved remarkable success, particularly with "think-with-image"
+                paradigms that enhance reasoning by actively image zooming to explore visual details, moving beyond
+                reliance on purely textual thought processes. However, this approach presents a challenge in balancing
+                performance with efficiency, as proactive zooming incurs massive computational costs and may impair
+                global understanding. To address this problem, we introduce adaptive chain-of-focus (Adaptive-CoF), a
+                framework that teaches VLMs to perform visual search and zooming only when necessary, based on obtained
+                visual cues and the given questions, achieving efficient multimodal reasoning. We enable this capability
+                through a two-stage pipeline: (1) supervised fine-tuning on an introduced MM-Adaptive-CoF SFT dataset
+                that is constructed by a visual search agent with multi-step reasoning trajectories under diverse
+                resolutions and question complexities, and (2) reinforcement learning with an adaptive group-aware
+                reward (AGAR) on MM-Adaptive-CoF RL dataset, allowing the model to master an adaptive strategy. Our
+                experiments show Adaptive-CoF achieves superior performance with exceptional efficiency. On the V*
+                benchmark, it reduces zoom-in operations by 75% compared to proactive models and achieves comparable
+                even better accuracy with nearly 50% fewer tokens, establishing a new paradigm for efficient and
+                accurate VLMs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+  <section class="section" id="Method">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <!-- <h2 class="title is-3" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Method</h2> -->
+
+          <h2 class="title is-3 section-title" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Method</h2>
+          <hr class="section-line">
+
+          <div class="content has-text-justified">
+            <img src="assets/images/visual_agent.jpg" class="interpolation-image" alt=""
+              style="display: block; margin-left: auto; margin-right: auto" width="900" />
+            <p>
+              We build a visual search agent based on the ReAct framework, which solves problems iteratively through a
+              Thought-Action loop. When executing visual search tasks, the agent employs a specific strategy of
+              progressive $\text{zoom-in}$ or refinement via tool execution (e.g., image processing or focusing
+              operations). This method enables the agent to acquire more precise, authentic, and valuable search data to
+              guide subsequent reasoning and decision steps.
+            </p>
+          </div>
+
+          <div class="content has-text-justified">
+            <img src="assets/images/model_inference.jpg" class="interpolation-image" alt=""
+              style="display: block; margin-left: auto; margin-right: auto" width="900" />
+            <div class="content has-text-justified">
+              <div class="content has-text-justified hover-card" style="padding: 1.5rem;">
+                <p>The <strong>Chain-of-Focus (CoF)</strong> method enables VLMs to perform adaptive search and zooming
+                  in on key image regions, thereby creating a chain of focus steps for multimodal reasoning with
+                  gradually obtained visual cues.</p>
+                <ol>
+                  <li>When the given image is <strong>high-resolution</strong> and uses a large number of visual tokens,
+                    or when the question depends on a large region of the image, the extracted visual tokens are often
+                    sufficient to answer the question directly.
+                  <li>When the image is <strong>low-resolution</strong> with fewer visual tokens, or when the question
+                    demands details from small regions of the image, the visual tokens may not provide enough cues. In
+                    this case, the model should search for and zoom in on key image regions to extract more visual cues.
+                </ol>
+                <p>In implementation, the visual tokens corresponding to key regions are appended to previously
+                  generated output tokens for subsequent outputs during a single generation round. This approach allows
+                  the VLMs to gather more visual cues, enabling them to analyze the image more thoroughly, accurately,
+                  and reliably than if they only relied on a static view of the image. </p>
+
+                <p><span style="color:#6a7bff; font-weight:bold;">Note </span> that our method does not perform visual
+                  search and zooming for every image, but performs adaptive search and zooming based on obtained visual
+                  cues, reducing the cost while keeping the performance.</p>
+              </div>
+              <img src="assets/images/agent.jpg" class="interpolation-image" alt=""
+                style="display: block; margin-left: auto; margin-right: auto" width="900" />
+              <div class="content has-text-justified">
+                <div class="content has-text-justified hover-card" style="padding: 1.5rem;">
+                  <p>CoF adopts a two-stage training pipeline.</p>
+                  <p><span style="color:#6a7bff; font-weight:bold;">In the SFT stage</span>, we construct the MM-CoF
+                    dataset with 5K samples from the SAM dataset across diverse resolutions. For each image, we
+                    synthesize a task and use a visual agent with multiple tools to search and reason until task
+                    completion. The agent's reasoning steps are then summarized into a CoF process by an LLM. We
+                    fine-tune a Qwen2.5-VL-7B model on MM-CoF for cold start.</p>
+                  <p><span style="color:#ff6b6b; font-weight:bold;">In the RL stage</span>, we leverage the outcome
+                    accuracies and formats as rewards to update the VLMs, enabling further refining the model’s search
+                    and reasoning strategy without human priors. We denote the obtained model as Qwen2.5-VL-7B-CoF.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </section>
+
+
+
+  <!-- <hr style="width: 60%; border-top: 1px solid #e0e0e0; margin: 40px auto;"> -->
+
+  <section class="section" id="Performance">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <!-- <h2 class="title is-3" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Performance</h2> -->
+
+          <h2 class="title is-3 section-title" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Performance</h2>
+          <hr class="section-line">
+          <h3 class="subsection-title">Adaptive Case Study</h3>
+          <img src="assets/images/adaptive_case_2.png" class="interpolation-image" alt=""
+            style="display: block; margin-left: auto; margin-right: auto; width: 100%; margin-bottom: 1rem;" />
+          <img src="assets/images/adaptive_case_1.png" class="interpolation-image" alt=""
+            style="display: block; margin-left: auto; margin-right: auto; width: 100%;" />
+
+
+          <!-- <div class="content has-text-justified"> -->
+
+          <div class="section-spacer"></div>
+          <h3 class="subsection-title">Visualized Reasoning Cases</h3>
+
+
+          <!-- case 1 -->
+          <div class="columns is-vcentered">
+
+            <!-- img -->
+            <div class="column is-6">
+              <figure class="image">
+                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                <img src="assets/images/case1.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+              </figure>
+            </div>
+
+
+            <!-- text -->
+            <div class="column is-6 has-text-left reasoning-block">
+              <p>
+                <strong>Query:</strong> Is the color of the bus red or yellow?<br>
+                (A) yellow<br>
+                (B) red<br>
+                Answer with the option's letter from the given choices directly.
+              </p>
+
+              <p><strong>Output:</strong></p>
+
+              <p class="justified-output">
+                <span class="tag-label">&lt;think&gt;</span>
+                To determine the color of the bus, I need to closely observe the bus in the image.
+                The bus is clearly visible, and its color can be seen distinctly as red.
+                <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <p><span class="tag-label">&lt;answer&gt;</span> B <span class="tag-label">&lt;/answer&gt;</span></p>
+            </div>
+
+          </div>
+
+
+
+
+
+
+          <!-- case 2 -->
+          <div class="columns is-vcentered">
+
+            <!-- img -->
+            <div class="column is-6">
+              <figure class="image">
+                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                <img src="assets/images/case2.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+              </figure>
+            </div>
+
+
+            <!-- text -->
+            <div class="column is-6 has-text-left reasoning-block">
+              <p>
+                <strong>Query:</strong> What is the color of the woman's jacket?<br>
+                (A) black<br>
+                (B) red<br>
+                (C) blue<br>
+                (D) orange<br>
+                Answer with the option's letter from the given choices directly.
+              </p>
+
+              <p><strong>Output:</strong></p>
+
+              <p class="justified-output">
+                <!-- <span class="tag-label">&lt;think&gt;</span>
+                To determine the color of the woman's jacket, I need to closely examine the area where she is located.
+                However, the color details are not immediately clear due to the distance and lighting conditions. To
+                improve visibility, I proceed step by step. I first identify the bounding box corresponding to the
+                woman:
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[570, 1726, 615, 1848]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span>.
+                I zoom in on this area to obtain a refined visual embedding
+                <span class="zoomin-label">&lt;|image_zoomin|&gt;</span>,
+                which reveals that the jacket is light blue.
+                <span class="tag-label">&lt;/think&gt;</span> -->
+                <span class="tag-label">&lt;think&gt;</span>
+                To determine the color of the woman's jacket, I need to closely examine the area where she is located.
+                However, the color details are not immediately clear due to the distance and lighting conditions. To
+                improve visibility, I proceed step by step. I first identify the bounding box corresponding to the
+                woman.
+                <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <div>
+                <span class="tag-label">&lt;tool_call&gt;</span>
+                <pre class="json-content"
+                  style="white-space: pre; font-family: monospace; margin: 0; padding: 0; background: transparent;">{
+  "name": "image_zoom_in_tool",
+  "arguments": {
+    "bbox_2d": [570, 1726, 615, 1848]
+  }
+}</pre>
+                <span class="tag-label">&lt;/tool_call&gt;</span>
+              </div>
+
+              <p>
+                <span class="tag-label">&lt;think&gt;</span>
+                This reveals that the jacket is light blue.
+                <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <p><span class="tag-label">&lt;answer&gt;</span> C <span class="tag-label">&lt;/answer&gt;</span></p>
+            </div>
+
+          </div>
+
+
+
+
+
+
+
+
+
+          <!-- case 3 -->
+          <div class="columns is-vcentered">
+
+            <!-- img -->
+            <div class="column is-6">
+              <figure class="image">
+                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                <img src="assets/images/case3.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+              </figure>
+            </div>
+
+
+            <!-- text -->
+            <div class="column is-6 has-text-left reasoning-block">
+              <p>
+                <strong>Query:</strong> What is the color of the lock?<br>
+                (A) yellow<br>
+                (B) silver<br>
+                (C) golden<br>
+                (D) red<br>
+                Answer with the option's letter from the given choices directly.
+              </p>
+
+              <p><strong>Output:</strong></p>
+
+              <!-- <p class="justified-output"> -->
+              <!-- <span class="tag-label">&lt;think&gt;</span>
+                To determine the color of the lock, I need to closely examine the area where the lock is located.
+                However, the lock is not immediately visible, making it difficult to identify its color. To improve
+                visibility, I proceed step by step. I first attempt to locate the lock but find no clear indication due
+                to its small size. I then focus on the red postbox, identifying two bounding boxes:
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[585, 700, 1305, 1821]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span> and
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[645, 920, 1275, 1821]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span>. I analyze these areas but still cannot locate the lock.
+                Next, I shift my attention to the area above the postbox, locating two bounding boxes:
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[0, 600, 1425, 1241]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span> and
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[0, 600, 1425, 1301]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span>. I zoom in on
+                <span class="bbox-label">&lt;|box_start|&gt;</span>[0, 600, 1425, 1241]<span
+                  class="bbox-label">&lt;|box_end|&gt;</span> to obtain a refined visual embedding
+                <span class="zoomin-label">&lt;|image_zoomin|&gt;</span>, which reveals the presence of a mailbox. Upon
+                analyzing this refined area, I confirm that the lock on the mailbox is silver.
+                <span class="tag-label">&lt;/think&gt;</span> -->
+              <!-- </p> -->
+
+              <span class="tag-label">&lt;think&gt;</span>
+              To determine the color of the lock, I need to closely examine the area where the lock is located. However,
+              the lock is not immediately visible, making it difficult to identify its color. To improve visibility, I
+              proceed step by step. I first attempt to locate the lock but find no clear indication due to its small
+              size. I then focus on the red postbox, identifying two bounding boxes: [585, 700, 1305, 1821] and [645,
+              920, 1275, 1821]. I analyze these areas but still cannot locate the lock. Next, I shift my attention to
+              the area above the postbox, locating two bounding boxes: [0, 600, 1425, 1241] and [0, 600, 1425, 1301]. I
+              zoom in the boundingbox.
+              <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <div>
+                <span class="tag-label">&lt;tool_call&gt;</span>
+                <pre class="json-content"
+                  style="white-space: pre; font-family: monospace; margin: 0; padding: 0; background: transparent;">{
+  "name": "image_zoom_in_tool",
+  "arguments": {
+    "bbox_2d": [0, 600, 1425, 1241]
+  }
+}</pre>
+                <span class="tag-label">&lt;/tool_call&gt;</span>
+              </div>
+
+              <p>
+                <span class="tag-label">&lt;think&gt;</span>
+                This reveals the presence of a mailbox.Upon analyzing this refined area, I confirm that the lock on the
+                mailbox is silver.
+                <span class="tag-label">&lt;/think&gt;</span>
+              </p>
+
+              <p><span class="tag-label">&lt;answer&gt;</span> B <span class="tag-label">&lt;/answer&gt;</span></p>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+  </section>
+
+
+
+
+  <section class="hero is-light" id="Conclusion">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <!-- Generalization Videos -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3 custom-heading">Conclusion</h2>
+            <div class="column">
+              <div class="content has-text-justified">
+                <p style="font-size: 125%">
+                  In this paper, we present adaptive chain-of-focus (Adaptive-CoF), a framework that enables VLMs to
+                  adaptively perform fine-grained visual search and zooming. Through a two-stage training pipeline
+                  combining supervised fine-tuning and reinforcement learning, Adaptive-CoF learns to balance detailed
+                  perception with computational efficiency, overcoming the trade-off between static viewing and
+                  exhaustive zooming. Experiments demonstrate state-of-the-art performance on challenging benchmarks
+                  with significantly reduced computational cost. </p>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-widescreen content">
+      <h2 class="title">BibTeX</h2>
+      <!-- <pre><code>@misc{zhang2025chain,
+      title={Adaptive Chain-of-Focus Reasoning via Dynamic Visual Searchand Zooming for Efficient VLMs}, 
+      author={Xintong Zhang and Zhi Gao and Bofei Zhang and Pengxiang Li and Xiaowen Zhang and Yang Liu and Tao Yuan and Yuwei Wu and Yunde Jia and Song-Chun Zhu and Qing Li},
+      year={2025},
+      eprint={2505.15436},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2505.15436},  -->
+      <pre><code></code>@article{zhang2025chain,
+      title={Adaptive Chain-of-Focus Reasoning via Dynamic Visual Search and Zooming for Efficient VLMs},
+      author = {Zhang, Xintong and Gao, Zhi and Zhang, Bofei and Li, Pengxiang and Zhang, Xiaowen and Liu, Yang and Yuan, Tao and Wu, Yuwei and Jia, Yunde and Zhu, Song-Chun and Qing Li},
+      journal={arXiv preprint arXiv:2505.15436},
+      year={2025}
+      }
+
+ </code></pre>
+    </div>
+  </section>
+
+
+  <!-- 
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p> Website borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a> under a <a
+              href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0
+              International</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer> -->
+
+  <script src="static/js/contents_bar.js"></script>
+
+
+</body>
+
+</html>
