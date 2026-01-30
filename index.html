@@ -417,8 +417,567 @@
         <div class="column">
           <h2 class="title is-3">Leaderboard<br>Accuracy</h2>
           <div class="content">
-            <img src="assets/images/accuracy_table.png" class="interpolation-image" alt="Accuracy Leaderboard"
-              style="display: block; margin-left: auto; margin-right: auto; width: 80%;" />
+            <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.8rem;">
+              <thead>
+                <tr>
+                  <th rowspan="2">Model</th>
+                  <th rowspan="2">Mode</th>
+                  <th colspan="2">Real-world</th>
+                  <th colspan="2">OCR</th>
+                  <th colspan="2">GUI</th>
+                  <th colspan="2">Knowledge</th>
+                  <th colspan="2">Math (w/o aux)</th>
+                  <th colspan="2">Overall Accuracy</th>
+                </tr>
+                <tr>
+                  <th>w/o enh.</th>
+                  <th>All</th>
+                  <th>w/o enh.</th>
+                  <th>All</th>
+                  <th>w/o enh.</th>
+                  <th>All</th>
+                  <th>w/o enh.</th>
+                  <th>All</th>
+                  <th>w/o enh.</th>
+                  <th>All</th>
+                  <th>w/o enh.</th>
+                  <th>All</th>
+                </tr>
+              </thead>
+              <tbody>
+
+
+                <!-- Gemini-3-Pro -->
+                <tr>
+                  <td rowspan="3">Gemini-3-Pro*</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">59.17</td>
+                  <td style="color: #595959;">53.33</td>
+                  <td style="color: #595959;">87.92</td>
+                  <td style="color: #595959;">87.33</td>
+                  <td style="color: #595959;">90.83</td>
+                  <td style="color: #595959;">86.67</td>
+                  <td style="color: #595959;">85.00</td>
+                  <td style="color: #595959;">83.00</td>
+                  <td style="color: #595959;">81.88</td>
+                  <td style="color: #595959;">75.50</td>
+                  <td style="color: #595959;">80.58</td>
+                  <td style="color: #595959;">76.85</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td style="background-color: #edf5ff;"><strong>80.42</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>74.00</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>89.58</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>89.67</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>92.08</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>90.00</strong></td>
+                  <td style="background-color: #f0fcf0;">92.50</td>
+                  <td style="background-color: #edf5ff;"><strong>93.50</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>93.12</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>87.00</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>89.04</strong></td>
+                  <td style="background-color: #edf5ff;"><strong>86.31</strong></td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">87.50</td>
+                  <td style="color: #595959;">80.33</td>
+                  <td style="color: #595959;">92.59</td>
+                  <td style="color: #595959;">93.00</td>
+                  <td style="color: #595959;">94.17</td>
+                  <td style="color: #595959;">92.67</td>
+                  <td style="color: #595959;">92.50</td>
+                  <td style="color: #595959;">94.00</td>
+                  <td style="color: #595959;">93.75</td>
+                  <td style="color: #595959;">91.00</td>
+                  <td style="color: #595959;">91.92</td>
+                  <td style="color: #595959;">89.85</td>
+                </tr>
+
+                <!-- GPT-5 -->
+                <tr>
+                  <td rowspan="3">GPT-5*</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">46.67</td>
+                  <td style="color: #595959;">45.67</td>
+                  <td style="color: #595959;">77.08</td>
+                  <td style="color: #595959;">73.67</td>
+                  <td style="color: #595959;">79.17</td>
+                  <td style="color: #595959;">74.33</td>
+                  <td style="color: #595959;">60.00</td>
+                  <td style="color: #595959;">54.50</td>
+                  <td style="color: #595959;">44.38</td>
+                  <td style="color: #595959;">39.00</td>
+                  <td style="color: #595959;">62.88</td>
+                  <td style="color: #595959;">59.08</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td style="background-color: #f0fcf0;">70.83</td>
+                  <td style="background-color: #f0fcf0;">64.67</td>
+                  <td style="background-color: #f0fcf0;">89.17</td>
+                  <td style="background-color: #f0fcf0;">86.33</td>
+                  <td style="background-color: #f0fcf0;">88.75</td>
+                  <td style="background-color: #f0fcf0;">85.33</td>
+                  <td style="background-color: #f0fcf0;">92.50</td>
+                  <td>86.00</td>
+                  <td>76.88</td>
+                  <td>71.00</td>
+                  <td style="background-color: #f0fcf0;">83.46</td>
+                  <td style="background-color: #f0fcf0;">78.69</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">97.92</td>
+                  <td style="color: #595959;">88.00</td>
+                  <td style="color: #595959;">90.42</td>
+                  <td style="color: #595959;">90.00</td>
+                  <td style="color: #595959;">91.67</td>
+                  <td style="color: #595959;">88.00</td>
+                  <td style="color: #595959;">96.88</td>
+                  <td style="color: #595959;">94.50</td>
+                  <td style="color: #595959;">90.62</td>
+                  <td style="color: #595959;">83.00</td>
+                  <td style="color: #595959;">93.46</td>
+                  <td style="color: #595959;">88.69</td>
+                </tr>
+
+
+
+                <!-- Qwen3-vl-235B-Instruct -->
+                <tr>
+                  <td rowspan="3">Qwen3-vl<br>-235B-Instruct</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">59.58</td>
+                  <td style="color: #595959;">52.33</td>
+                  <td style="color: #595959;">81.25</td>
+                  <td style="color: #595959;">78.00</td>
+                  <td style="color: #595959;">84.58</td>
+                  <td style="color: #595959;">76.67</td>
+                  <td style="color: #595959;">83.12</td>
+                  <td style="color: #595959;">78.50</td>
+                  <td style="color: #595959;">83.12</td>
+                  <td style="color: #595959;">73.00</td>
+                  <td style="color: #595959;">77.60</td>
+                  <td style="color: #595959;">71.08</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>64.17</td>
+                  <td>56.33</td>
+                  <td>82.08</td>
+                  <td>80.00</td>
+                  <td>87.08</td>
+                  <td>80.00</td>
+                  <td style="background-color: #edf5ff;"><strong>93.75</strong></td>
+                  <td style="background-color: #f0fcf0;">86.50</td>
+                  <td style="background-color: #f0fcf0;">85.62</td>
+                  <td style="background-color: #f0fcf0;">76.50</td>
+                  <td>81.44</td>
+                  <td>75.00</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">87.92</td>
+                  <td style="color: #595959;">80.67</td>
+                  <td style="color: #595959;">90.83</td>
+                  <td style="color: #595959;">91.33</td>
+                  <td style="color: #595959;">97.08</td>
+                  <td style="color: #595959;">91.33</td>
+                  <td style="color: #595959;">96.25</td>
+                  <td style="color: #595959;">96.50</td>
+                  <td style="color: #595959;">96.88</td>
+                  <td style="color: #595959;">94.00</td>
+                  <td style="color: #595959;">93.37</td>
+                  <td style="color: #595959;">90.08</td>
+                </tr>
+
+                <!-- Qwen3-vl-32B-Instruct -->
+                <tr>
+                  <td rowspan="3">Qwen3-vl<br>-32B-Instruct</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">55.83</td>
+                  <td style="color: #595959;">51.00</td>
+                  <td style="color: #595959;">82.92</td>
+                  <td style="color: #595959;">78.00</td>
+                  <td style="color: #595959;">76.67</td>
+                  <td style="color: #595959;">71.33</td>
+                  <td style="color: #595959;">83.75</td>
+                  <td style="color: #595959;">77.00</td>
+                  <td style="color: #595959;">76.25</td>
+                  <td style="color: #595959;">68.00</td>
+                  <td style="color: #595959;">74.33</td>
+                  <td style="color: #595959;">68.54</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>63.33</td>
+                  <td>57.33</td>
+                  <td>85.42</td>
+                  <td>82.67</td>
+                  <td>77.00</td>
+                  <td>70.00</td>
+                  <td>84.38</td>
+                  <td>79.00</td>
+                  <td>81.88</td>
+                  <td>73.50</td>
+                  <td>77.79</td>
+                  <td>71.92</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">87.08</td>
+                  <td style="color: #595959;">81.67</td>
+                  <td style="color: #595959;">92.92</td>
+                  <td style="color: #595959;">92.00</td>
+                  <td style="color: #595959;">81.67</td>
+                  <td style="color: #595959;">75.67</td>
+                  <td style="color: #595959;">96.25</td>
+                  <td style="color: #595959;">95.00</td>
+                  <td style="color: #595959;">90.00</td>
+                  <td style="color: #595959;">87.50</td>
+                  <td style="color: #595959;">89.04</td>
+                  <td style="color: #595959;">85.62</td>
+                </tr>
+
+                <!-- Qwen3-vl-8B-Instruct -->
+                <tr>
+                  <td rowspan="3">Qwen3-vl<br>-8B-Instruct</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">56.25</td>
+                  <td style="color: #595959;">50.00</td>
+                  <td style="color: #595959;">64.17</td>
+                  <td style="color: #595959;">62.33</td>
+                  <td style="color: #595959;">57.50</td>
+                  <td style="color: #595959;">54.00</td>
+                  <td style="color: #595959;">72.50</td>
+                  <td style="color: #595959;">66.00</td>
+                  <td style="color: #595959;">55.62</td>
+                  <td style="color: #595959;">50.50</td>
+                  <td style="color: #595959;">60.77</td>
+                  <td style="color: #595959;">56.31</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>57.50</td>
+                  <td>52.33</td>
+                  <td>68.33</td>
+                  <td>65.67</td>
+                  <td>65.83</td>
+                  <td>59.67</td>
+                  <td>78.75</td>
+                  <td>71.50</td>
+                  <td>69.38</td>
+                  <td>62.00</td>
+                  <td>67.02</td>
+                  <td>61.54</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">83.75</td>
+                  <td style="color: #595959;">78.00</td>
+                  <td style="color: #595959;">79.17</td>
+                  <td style="color: #595959;">80.67</td>
+                  <td style="color: #595959;">68.75</td>
+                  <td style="color: #595959;">67.00</td>
+                  <td style="color: #595959;">80.62</td>
+                  <td style="color: #595959;">81.00</td>
+                  <td style="color: #595959;">80.00</td>
+                  <td style="color: #595959;">80.00</td>
+                  <td style="color: #595959;">78.17</td>
+                  <td style="color: #595959;">76.85</td>
+                </tr>
+
+                <!-- AdaptVision -->
+                <tr>
+                  <td rowspan="3">AdaptVision</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">45.83</td>
+                  <td style="color: #595959;">43.00</td>
+                  <td style="color: #595959;">62.92</td>
+                  <td style="color: #595959;">61.67</td>
+                  <td style="color: #595959;">48.75</td>
+                  <td style="color: #595959;">47.67</td>
+                  <td style="color: #595959;">54.37</td>
+                  <td style="color: #595959;">54.00</td>
+                  <td style="color: #595959;">45.00</td>
+                  <td style="color: #595959;">44.50</td>
+                  <td style="color: #595959;">51.63</td>
+                  <td style="color: #595959;">50.31</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>49.17</td>
+                  <td>46.33</td>
+                  <td>64.17</td>
+                  <td>64.00</td>
+                  <td>52.92</td>
+                  <td>54.33</td>
+                  <td>60.62</td>
+                  <td>54.50</td>
+                  <td>49.38</td>
+                  <td>45.00</td>
+                  <td>55.29</td>
+                  <td>53.31</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">74.17</td>
+                  <td style="color: #595959;">70.67</td>
+                  <td style="color: #595959;">71.25</td>
+                  <td style="color: #595959;">76.00</td>
+                  <td style="color: #595959;">62.92</td>
+                  <td style="color: #595959;">65.67</td>
+                  <td style="color: #595959;">71.88</td>
+                  <td style="color: #595959;">73.00</td>
+                  <td style="color: #595959;">68.75</td>
+                  <td style="color: #595959;">69.00</td>
+                  <td style="color: #595959;">69.71</td>
+                  <td style="color: #595959;">70.85</td>
+                </tr>
+
+                <!-- Deepeyes v2 -->
+                <tr>
+                  <td rowspan="3">Deepeyes v2*</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">58.75</td>
+                  <td style="color: #595959;">55.00</td>
+                  <td style="color: #595959;">58.33</td>
+                  <td style="color: #595959;">58.33</td>
+                  <td style="color: #595959;">54.58</td>
+                  <td style="color: #595959;">54.67</td>
+                  <td style="color: #595959;">48.12</td>
+                  <td style="color: #595959;">47.50</td>
+                  <td style="color: #595959;">41.88</td>
+                  <td style="color: #595959;">39.00</td>
+                  <td style="color: #595959;">53.46</td>
+                  <td style="color: #595959;">52.08</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>61.25</td>
+                  <td>56.33</td>
+                  <td>59.58</td>
+                  <td>57.67</td>
+                  <td>57.08</td>
+                  <td>55.67</td>
+                  <td>59.38</td>
+                  <td>53.50</td>
+                  <td>50.00</td>
+                  <td>49.00</td>
+                  <td>57.88</td>
+                  <td>54.92</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">75.42</td>
+                  <td style="color: #595959;">74.33</td>
+                  <td style="color: #595959;">70.83</td>
+                  <td style="color: #595959;">74.33</td>
+                  <td style="color: #595959;">68.33</td>
+                  <td style="color: #595959;">69.33</td>
+                  <td style="color: #595959;">65.00</td>
+                  <td style="color: #595959;">65.50</td>
+                  <td style="color: #595959;">63.12</td>
+                  <td style="color: #595959;">64.00</td>
+                  <td style="color: #595959;">69.23</td>
+                  <td style="color: #595959;">70.23</td>
+                </tr>
+
+                <!-- PyVision -->
+                <tr>
+                  <td rowspan="3">PyVision*</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">40.00</td>
+                  <td style="color: #595959;">38.00</td>
+                  <td style="color: #595959;">62.08</td>
+                  <td style="color: #595959;">60.33</td>
+                  <td style="color: #595959;">75.00</td>
+                  <td style="color: #595959;">70.00</td>
+                  <td style="color: #595959;">35.62</td>
+                  <td style="color: #595959;">34.50</td>
+                  <td style="color: #595959;">35.00</td>
+                  <td style="color: #595959;">31.00</td>
+                  <td style="color: #595959;">51.73</td>
+                  <td style="color: #595959;">48.92</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>50.83</td>
+                  <td>47.33</td>
+                  <td>72.50</td>
+                  <td>70.67</td>
+                  <td>77.92</td>
+                  <td>73.33</td>
+                  <td>58.75</td>
+                  <td>52.50</td>
+                  <td>35.00</td>
+                  <td>31.00</td>
+                  <td>60.87</td>
+                  <td>57.00</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">94.58</td>
+                  <td style="color: #595959;">84.67</td>
+                  <td style="color: #595959;">79.58</td>
+                  <td style="color: #595959;">80.67</td>
+                  <td style="color: #595959;">90.00</td>
+                  <td style="color: #595959;">86.00</td>
+                  <td style="color: #595959;">60.00</td>
+                  <td style="color: #595959;">62.50</td>
+                  <td style="color: #595959;">58.13</td>
+                  <td style="color: #595959;">53.50</td>
+                  <td style="color: #595959;">79.13</td>
+                  <td style="color: #595959;">75.85</td>
+                </tr>
+
+                <!-- Thyme -->
+                <tr>
+                  <td rowspan="3">Thyme*</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">55.00</td>
+                  <td style="color: #595959;">51.67</td>
+                  <td style="color: #595959;">58.33</td>
+                  <td style="color: #595959;">57.67</td>
+                  <td style="color: #595959;">50.00</td>
+                  <td style="color: #595959;">49.67</td>
+                  <td style="color: #595959;">55.00</td>
+                  <td style="color: #595959;">51.00</td>
+                  <td style="color: #595959;">51.88</td>
+                  <td style="color: #595959;">48.00</td>
+                  <td style="color: #595959;">54.13</td>
+                  <td style="color: #595959;">51.92</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>60.83</td>
+                  <td>58.00</td>
+                  <td>61.67</td>
+                  <td>60.00</td>
+                  <td>55.83</td>
+                  <td>53.67</td>
+                  <td>58.75</td>
+                  <td>51.00</td>
+                  <td>51.88</td>
+                  <td>50.00</td>
+                  <td>58.17</td>
+                  <td>55.15</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">75.83</td>
+                  <td style="color: #595959;">73.33</td>
+                  <td style="color: #595959;">66.67</td>
+                  <td style="color: #595959;">69.00</td>
+                  <td style="color: #595959;">63.75</td>
+                  <td style="color: #595959;">64.67</td>
+                  <td style="color: #595959;">64.38</td>
+                  <td style="color: #595959;">67.50</td>
+                  <td style="color: #595959;">63.12</td>
+                  <td style="color: #595959;">63.00</td>
+                  <td style="color: #595959;">67.21</td>
+                  <td style="color: #595959;">67.85</td>
+                </tr>
+
+                <!-- Deepeyes -->
+                <tr>
+                  <td rowspan="3">Deepeyes</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">50.00</td>
+                  <td style="color: #595959;">48.33</td>
+                  <td style="color: #595959;">50.42</td>
+                  <td style="color: #595959;">51.33</td>
+                  <td style="color: #595959;">52.50</td>
+                  <td style="color: #595959;">53.33</td>
+                  <td style="color: #595959;">50.62</td>
+                  <td style="color: #595959;">48.50</td>
+                  <td style="color: #595959;">43.12</td>
+                  <td style="color: #595959;">41.50</td>
+                  <td style="color: #595959;">49.71</td>
+                  <td style="color: #595959;">49.15</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>54.17</td>
+                  <td>53.00</td>
+                  <td>57.08</td>
+                  <td>57.67</td>
+                  <td>51.25</td>
+                  <td>52.33</td>
+                  <td>53.12</td>
+                  <td>50.00</td>
+                  <td>55.00</td>
+                  <td>50.50</td>
+                  <td>54.13</td>
+                  <td>53.08</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">67.08</td>
+                  <td style="color: #595959;">66.33</td>
+                  <td style="color: #595959;">62.92</td>
+                  <td style="color: #595959;">66.67</td>
+                  <td style="color: #595959;">61.67</td>
+                  <td style="color: #595959;">64.00</td>
+                  <td style="color: #595959;">66.88</td>
+                  <td style="color: #595959;">69.00</td>
+                  <td style="color: #595959;">61.88</td>
+                  <td style="color: #595959;">62.00</td>
+                  <td style="color: #595959;">64.04</td>
+                  <td style="color: #595959;">65.69</td>
+                </tr>
+
+                <!-- PixelReasoner -->
+                <tr>
+                  <td rowspan="3">PixelReasoner</td>
+                  <td style="color: #595959;">Text</td>
+                  <td style="color: #595959;">42.08</td>
+                  <td style="color: #595959;">38.00</td>
+                  <td style="color: #595959;">58.75</td>
+                  <td style="color: #595959;">58.33</td>
+                  <td style="color: #595959;">48.33</td>
+                  <td style="color: #595959;">48.00</td>
+                  <td style="color: #595959;">56.88</td>
+                  <td style="color: #595959;">55.50</td>
+                  <td style="color: #595959;">46.25</td>
+                  <td style="color: #595959;">43.00</td>
+                  <td style="color: #595959;">50.29</td>
+                  <td style="color: #595959;">48.46</td>
+                </tr>
+                <tr>
+                  <td>Adaptive</td>
+                  <td>53.75</td>
+                  <td>51.33</td>
+                  <td>61.25</td>
+                  <td>62.33</td>
+                  <td>61.67</td>
+                  <td>53.00</td>
+                  <td>58.13</td>
+                  <td>59.00</td>
+                  <td>51.88</td>
+                  <td>50.00</td>
+                  <td>55.19</td>
+                  <td>55.23</td>
+                </tr>
+                <tr>
+                  <td style="color: #595959;">Oracle</td>
+                  <td style="color: #595959;">70.83</td>
+                  <td style="color: #595959;">67.67</td>
+                  <td style="color: #595959;">72.92</td>
+                  <td style="color: #595959;">75.00</td>
+                  <td style="color: #595959;">66.67</td>
+                  <td style="color: #595959;">58.67</td>
+                  <td style="color: #595959;">65.62</td>
+                  <td style="color: #595959;">67.50</td>
+                  <td style="color: #595959;">62.50</td>
+                  <td style="color: #595959;">64.00</td>
+                  <td style="color: #595959;">65.96</td>
+                  <td style="color: #595959;">66.69</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -639,34 +1198,7 @@
 
 
 
-  <section class="hero is-light" id="Conclusion">
-    <div class="hero-body">
-      <div class="container is-max-widescreen">
-        <!-- Generalization Videos -->
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-full-width">
-            <h2 class="title is-3 custom-heading">Conclusion</h2>
-            <div class="column">
-              <div class="content has-text-justified">
-                <p style="font-size: 125%">
-                  In this paper, we present adaptive chain-of-focus (Adaptive-CoF), a framework that enables
-                  VLMs to
-                  adaptively perform fine-grained visual search and zooming. Through a two-stage training
-                  pipeline
-                  combining supervised fine-tuning and reinforcement learning, Adaptive-CoF learns to balance
-                  detailed
-                  perception with computational efficiency, overcoming the trade-off between static viewing
-                  and
-                  exhaustive zooming. Experiments demonstrate state-of-the-art performance on challenging
-                  benchmarks
-                  with significantly reduced computational cost. </p>
 
-              </div>
-            </div>
-
-          </div>
-        </div>
-  </section>
 
   <section class="section" id="BibTeX">
     <div class="container is-max-widescreen content">
