@@ -252,7 +252,7 @@
 
 
 
-  <section class="section" id="Method">
+  <!-- <section class="section" id="Method">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column">
@@ -313,8 +313,153 @@
             </div>
           </div>
         </div>
-  </section>
+  </section> -->
 
+
+  <section class="section">
+    <div class="container">
+
+      <div class="columns is-centered">
+        <div class="column is-full has-text-centered content">
+          <h2 class="title is-3" id="leaderboard">Leaderboard</h2>
+          <div class="content">
+            <table class="js-sort-table" id="results">
+              <thead>
+                <tr>
+                  <th rowspan="2" style="vertical-align: middle;"><strong>#</strong></th>
+                  <th rowspan="2" style="vertical-align: middle;"><strong>Model</strong></th>
+                  <th colspan="1" style="vertical-align: middle;"><strong>Adaptive Mode Selection</strong></th>
+                  <th colspan="2" style="vertical-align: middle;"><strong>Reasoning Process Quality</strong></th>
+                  <th colspan="3" style="vertical-align: middle;"><strong>Reasoning Process Efficiency</strong></th>
+                </tr>
+                <tr>
+                  <th><strong>MCC</strong></th>
+                  <th><strong>Key Step Coverage</strong></th>
+                  <th><strong>Tool Effectiveness</strong></th>
+                  <th><strong>Step</strong></th>
+                  <th><strong>Tool</strong></th>
+                  <th><strong>Tokens</strong></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>GPT-5</td>
+                  <td><b>0.41</b></td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Qwen3-vl-235B-Instruct</td>
+                  <td>0.26</td>
+                  <td><b>84.83</b></td>
+                  <td>89.64</td>
+                  <td>2.04</td>
+                  <td>1.04</td>
+                  <td>7531.95</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Gemini-3-Pro</td>
+                  <td>0.24</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>PyVision</td>
+                  <td>0.20</td>
+                  <td>77.43</td>
+                  <td>62.02</td>
+                  <td>2.76</td>
+                  <td>1.76</td>
+                  <td><b>2481.00</b></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>AdaptVision</td>
+                  <td>0.17</td>
+                  <td>72.60</td>
+                  <td>81.70</td>
+                  <td>1.51</td>
+                  <td>0.51</td>
+                  <td>4175.96</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Qwen3-vl-32B-Instruct</td>
+                  <td>0.14</td>
+                  <td>83.79</td>
+                  <td><b>92.98</b></td>
+                  <td>2.42</td>
+                  <td>1.44</td>
+                  <td>7725.99</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>PixelReasoner</td>
+                  <td>0.11</td>
+                  <td>76.02</td>
+                  <td>56.51</td>
+                  <td>1.37</td>
+                  <td>0.37</td>
+                  <td>4229.00</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Qwen3-vl-8B-Instruct</td>
+                  <td>0.06</td>
+                  <td>78.40</td>
+                  <td>91.62</td>
+                  <td>1.76</td>
+                  <td>1.20</td>
+                  <td>8282.40</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Deepeyes v2</td>
+                  <td>0.03</td>
+                  <td>75.14</td>
+                  <td>56.79</td>
+                  <td>2.09</td>
+                  <td>1.09</td>
+                  <td>6918.90</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Thyme</td>
+                  <td>0.01</td>
+                  <td>77.14</td>
+                  <td>56.50</td>
+                  <td><b>1.05</b></td>
+                  <td><b>0.06</b></td>
+                  <td>6708.47</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>Deepeyes</td>
+                  <td>0.00</td>
+                  <td>75.56</td>
+                  <td>50.99</td>
+                  <td>2.00</td>
+                  <td>1.68</td>
+                  <td>7601.45</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
 
 
   <!-- <hr style="width: 60%; border-top: 1px solid #e0e0e0; margin: 40px auto;"> -->
