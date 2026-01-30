@@ -142,10 +142,17 @@ body {
     border-radius: 10px;
     padding: 0;
     font-size: 0;
+    width: 100% !important;
+    flex: 0 0 100% !important;
 }
 
 .results-carousel video {
     margin: 0;
+}
+
+.results-carousel .box {
+    width: 100% !important;
+    margin: 0 auto;
 }
 
 
