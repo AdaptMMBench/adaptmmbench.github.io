@@ -107,44 +107,45 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-2 publication-title">Adaptive Chain-of-Focus Reasoning via Dynamic Visual Search
-              and Zooming for Efficient VLMs</h1>
+            <h1 class="title is-2 publication-title">AdaptMMBench: Benchmarking Adaptive Multimodal Reasoning for Mode
+              Selection and Reasoning Process</h1>
             <!-- <h1 class="title is-2 custom-heading">Chain-of-Focus: Adaptive Visual Search and Zooming for Multimodal Reasoning via RL</h1> -->
             <div class="is-size-5 publication-authors">
               <span class="author-block">
                 <a target="_blank" href="https://github.com/xtong-zhang">Xintong Zhang</a><sup>1,2*</sup>,
               </span>
               <span class="author-block">
-                <a target="_blank" href="https://zhigao2017.github.io/">Zhi Gao</a><sup>2,3*</sup>,
+                <a target="_blank" href="https://adaptmmbench.github.io/">Xiaowen Zhang</a><sup>2,3*</sup>,
               </span>
               <span class="author-block">
-                <a target="_blank" href="https://bofei5675.github.io/">Bofei Zhang</a><sup>2</sup>,
+                <a target="_blank" href="https://adaptmmbench.github.io/">Jongrong Wu</a><sup>2</sup>,
               </span>
               <span class="author-block">
-                <a target="_blank" href="https://pengxiang-li.github.io/">Pengxiang Li</a><sup>1,2</sup>,
+                <a target="_blank" href="https://zhigao2017.github.io/">Zhi Gao</a><sup>1,2</sup>,
               </span>
               <span class="author-block">
-                <a target="_blank" href="https://adatwi.github.io/">Xiaowen Zhang</a><sup>2</sup>,
+                <a target="_blank" href="https://adaptmmbench.github.io/">Shilin Yan</a><sup>2</sup>,
               </span>
               <span class="author-block">
-                <a target="_blank" href="https://adatwi.github.io/">Yang Liu</a><sup>2</sup>,
+                <a target="_blank" href="https://adaptmmbench.github.io/">Zhenxin Diao</a><sup>2</sup>,
               </span>
               <span class="author-block">
-                <a target="_blank" href="https://adatwi.github.io/">Tao Yuan</a><sup>2</sup>
+                <a target="_blank" href="https://adaptmmbench.github.io/">Kunpeng Gao</a><sup>2</sup>
               </span>
               <span class="author-block">
-                <a target="_blank" href="https://wu-yuwei-bit.github.io/">Yuwei Wu</a><sup>1,4†</sup>
-              </span>
-              <span class="author-block">
-                <a target="_blank" href="https://scholar.google.com/citations?user=Sl6TV7gAAAAJ&hl=en">Yunde
-                  Jia</a><sup>4</sup>
-              </span>
-              <span class="author-block">
-                <a target="_blank" href="https://www.zhusongchun.net/">Song-Chun Zhu</a><sup>2,3,5</sup>
-              </span>
-              <span class="author-block">
-                <a target="_blank" href="https://liqing.io/">Qing Li</a><sup>2†</sup>
-              </span>
+                <span class="author-block">
+                  <a target="_blank" href="https://adaptmmbench.github.io/">Xuanyan Chen</a><sup>2</sup>
+                </span>
+                <span class="author-block">
+                  <a target="_blank" href="https://wu-yuwei-bit.github.io/">Yuwei Wu</a><sup>1,4†</sup>
+                </span>
+                <span class="author-block">
+                  <a target="_blank" href="https://scholar.google.com/citations?user=Sl6TV7gAAAAJ&hl=en">Yunde
+                    Jia</a><sup>4</sup>
+                </span>
+                <span class="author-block">
+                  <a target="_blank" href="https://liqing.io/">Qing Li</a><sup>2†</sup>
+                </span>
 
 
             </div>
@@ -225,36 +226,21 @@
               <!-- <img src="assets/images/teaser.jpg" class="interpolation-image"
                alt="" style="display: block; margin-left: auto; margin-right: auto" width="900"/> -->
               <p style="font-size: 125%">
-                <!-- Vision language models (VLMs) have achieved impressive performance across a variety of computer vision
-                tasks. However, the multimodal reasoning capability has not been fully explored in existing models. In
-                this paper, we propose a Chain-of-Focus (CoF) method that allows VLMs to perform adaptive focusing and
-                zooming in on key image regions based on obtained visual cues and the given questions, achieving
-                efficient multimodal reasoning. To enable this CoF capability, we present a two-stage training pipeline,
-                including supervised fine-tuning (SFT) and reinforcement learning (RL). In the SFT stage, we construct
-                the MM-CoF dataset, comprising 3K samples derived from a visual agent designed to adaptively identify
-                key regions to solve visual tasks with different image resolutions and questions. We use MM-CoF to
-                fine-tune the Qwen2.5-VL model for cold start. In the RL stage, we leverage the outcome accuracies and
-                formats as rewards to update the Qwen2.5-VL model, enabling further refining the model's search and
-                reasoning strategy without human priors. Our model achieves significant improvements on multiple
-                benchmarks. On the V* benchmark that requires strong visual reasoning capability, our model outperforms
-                existing VLMs by 5% among 8 image different resolutions ranging from 224 to 4K, demonstrating the
-                effectiveness of the proposed CoF method and facilitating the more efficient deployment of VLMs in
-                practical applications. -->
-                Vision Language Models (VLMs) have achieved remarkable success, particularly with "think-with-image"
-                paradigms that enhance reasoning by actively image zooming to explore visual details, moving beyond
-                reliance on purely textual thought processes. However, this approach presents a challenge in balancing
-                performance with efficiency, as proactive zooming incurs massive computational costs and may impair
-                global understanding. To address this problem, we introduce adaptive chain-of-focus (Adaptive-CoF), a
-                framework that teaches VLMs to perform visual search and zooming only when necessary, based on obtained
-                visual cues and the given questions, achieving efficient multimodal reasoning. We enable this capability
-                through a two-stage pipeline: (1) supervised fine-tuning on an introduced MM-Adaptive-CoF SFT dataset
-                that is constructed by a visual search agent with multi-step reasoning trajectories under diverse
-                resolutions and question complexities, and (2) reinforcement learning with an adaptive group-aware
-                reward (AGAR) on MM-Adaptive-CoF RL dataset, allowing the model to master an adaptive strategy. Our
-                experiments show Adaptive-CoF achieves superior performance with exceptional efficiency. On the V*
-                benchmark, it reduces zoom-in operations by 75% compared to proactive models and achieves comparable
-                even better accuracy with nearly 50% fewer tokens, establishing a new paradigm for efficient and
-                accurate VLMs.
+                Adaptive multimodal reasoning has emerged as a promising frontier in Vision-Language Models (VLMs),
+                aiming to dynamically modulate between tool-augmented visual reasoning and text reasoning to enhance
+                both effectiveness and efficiency. However, existing evaluations rely on static difficulty labels and
+                simplistic metrics, which fail to capture the dynamic nature of difficulty relative to varying model
+                capacities. Consequently, they obscure the distinction between adaptive mode selection and general
+                performance while neglecting fine-grained process analyses. In this paper, we propose AdaptMMBench, a
+                comprehensive benchmark for adaptive multimodal reasoning across five domains: real-world, OCR, GUI,
+                knowledge, and math, encompassing both direct perception and complex reasoning tasks. AdaptMMBench
+                utilizes a Matthews Correlation Coefficient (MCC) metric to evaluate the selection rationality of
+                different reasoning modes, isolating this meta-cognition ability by dynamically identifying task
+                difficulties based on models' capability boundaries. Moreover, AdaptMMBench facilitates
+                multi-dimensional process evaluation across key step coverage, tool effectiveness, and computational
+                efficiency. Our evaluation reveals that while adaptive mode selection scales with model capacity, it
+                notably decouples from final accuracy. Conversely, key step coverage aligns with performance, though
+                tool effectiveness remains highly inconsistent across model architectures.
               </p>
             </div>
           </div>
