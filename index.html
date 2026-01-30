@@ -275,285 +275,360 @@
               style="display: block; margin-left: auto; margin-right: auto" width="900" /> -->
             <div class="content has-text-justified">
               <div class="content has-text-justified hover-card" style="padding: 1.5rem;">
-                <p>The <strong>Chain-of-Focus (CoF)</strong> method enables VLMs to perform adaptive search and zooming
-                  in on key image regions, thereby creating a chain of focus steps for multimodal reasoning with
-                  gradually obtained visual cues.</p>
-                <ol>
-                  <li>When the given image is <strong>high-resolution</strong> and uses a large number of visual tokens,
-                    or when the question depends on a large region of the image, the extracted visual tokens are often
-                    sufficient to answer the question directly.
-                  <li>When the image is <strong>low-resolution</strong> with fewer visual tokens, or when the question
-                    demands details from small regions of the image, the visual tokens may not provide enough cues. In
-                    this case, the model should search for and zoom in on key image regions to extract more visual cues.
-                </ol>
-                <p>In implementation, the visual tokens corresponding to key regions are appended to previously
-                  generated output tokens for subsequent outputs during a single generation round. This approach allows
-                  the VLMs to gather more visual cues, enabling them to analyze the image more thoroughly, accurately,
-                  and reliably than if they only relied on a static view of the image. </p>
+                <h3 class="title is-4">Adaptive Mode Selection Evaluation</h3>
+                <p>
+                  Adaptive intelligence depends on a model’s ability to assess whether its current information is
+                  sufficient to solve a task. Consequently, the appropriateness of a reasoning mode should be evaluated
+                  independently of answer correctness.
+                  Under this principle, the necessity of tool invocation is determined by the outcome of text-only
+                  reasoning.
+                </p>
+                <p>
+                  If a task can be solved using text reasoning alone, it is labeled as <strong>Tool-Redundant</strong>,
+                  indicating that visual tool invocation is unnecessary and may introduce noise. Conversely, tasks that
+                  cannot be solved via text-only reasoning are labeled as <strong>Tool-Required</strong>, indicating
+                  that visual tool invocation is necessary to obtain additional information. This categorization defines
+                  the mode selection labels used in our evaluation. Accordingly, tool invocation decisions are evaluated
+                  using a confusion matrix: TP denotes Tool-Required cases where the model invokes tools, FN denotes
+                  Tool-Required cases where the model does not invoke tools, TN denotes Tool-Redundant cases where the
+                  model selects text-only reasoning, and FP denotes Tool-Redundant cases where the model unnecessarily
+                  invokes tools.
+                </p>
+                <p><strong>Matthews Correlation Coefficient (MCC).</strong> In adaptive mode selection, the proportions
+                  of tool-redundant and tool-required cases are model-dependent, leading to varying degrees of class
+                  imbalance in the resulting confusion matrix. To ensure a robust evaluation, we adopt the MCC:</p>
 
-                <p><span style="color:#6a7bff; font-weight:bold;">Note </span> that our method does not perform visual
-                  search and zooming for every image, but performs adaptive search and zooming based on obtained visual
-                  cues, reducing the cost while keeping the performance.</p>
+                $$
+                \text{MCC} =
+                \frac{TP \cdot TN - FP \cdot FN}
+                {\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)} + \epsilon}
+                $$
+
+                <p>where $\epsilon$ is a small constant for numerical stability. MCC ranges from $[-1,1]$, with $1$
+                  indicating perfect agreement with the optimal mode selection, $0$ denoting the chance-level
+                  performance, and $-1$ indicating complete misalignment.</p>
               </div>
-              <img src="assets/images/agent.jpg" class="interpolation-image" alt=""
-                style="display: block; margin-left: auto; margin-right: auto" width="900" />
-              <div class="content has-text-justified">
-                <div class="content has-text-justified hover-card" style="padding: 1.5rem;">
-                  <p>CoF adopts a two-stage training pipeline.</p>
-                  <p><span style="color:#6a7bff; font-weight:bold;">In the SFT stage</span>, we construct the MM-CoF
-                    dataset with 5K samples from the SAM dataset across diverse resolutions. For each image, we
-                    synthesize a task and use a visual agent with multiple tools to search and reason until task
-                    completion. The agent's reasoning steps are then summarized into a CoF process by an LLM. We
-                    fine-tune a Qwen2.5-VL-7B model on MM-CoF for cold start.</p>
-                  <p><span style="color:#ff6b6b; font-weight:bold;">In the RL stage</span>, we leverage the outcome
-                    accuracies and formats as rewards to update the VLMs, enabling further refining the model’s search
-                    and reasoning strategy without human priors. We denote the obtained model as Qwen2.5-VL-7B-CoF.</p>
-                </div>
+
+              <div class="content has-text-justified hover-card" style="padding: 1.5rem; margin-top: 1rem;">
+                <h3 class="title is-4">Reasoning Process Evaluation</h3>
+                <p>
+                  While MCC measures the quality of mode selection, it does not assess the validity of the reasoning
+                  process. Models may produce correct answers despite logical errors or improper tool usage. To address
+                  this limitation, we introduce three process-oriented metrics to evaluate reasoning coherence and tool
+                  execution fidelity.
+                </p>
+                <p>
+                  A reasoning trajectory $\mathcal{R}$ is formalized as an interleaved sequence of reasoning steps and
+                  tool invocations:
+                  $$ \mathcal{R} = \{(s_1, t_1), (s_2, t_2), \dots, s_n\}, $$
+                  where $s_i$ is the reasoning at step $i$ and $t_i \in \mathcal{T}$ represents the corresponding tool
+                  invocation. The trajectory terminates at the final reasoning step $s_n$, and produces the answer.
+                </p>
+
+                <h4 class="title is-5">Key Steps Coverage</h4>
+                <p>
+                  Following the evaluation paradigm of MME, we assess whether a model’s reasoning chain
+                  $\{s_i\}_{i=1}^n$ covers the essential human-annotated key steps $K$. We employ GPT-5 as an evaluator
+                  to identify the presence of these key steps within the generated reasoning, and define the key step
+                  coverage as:
+                </p>
+                $$
+                \text{KCoverage}
+                =
+                \frac{1}{|K|}
+                \max_j
+                \prod_{i=1}^j
+                \mathbb{I}\!\left[k_i \underset{\text{\tiny GPT-5}}{\in} \{s_1,\dots,s_n\}\right].
+                $$
+                <p>
+                  This metric measures how far the model’s reasoning progresses along the key steps. Rather than
+                  penalizing skipped or compressed steps, KCoverage captures the maximum extent to which the reasoning
+                  aligns with the solution structure, allowing different reasoning styles and reflecting how close the
+                  model comes to a correct solution.
+                </p>
+
+                <h4 class="title is-5">Tool Execution Effectiveness</h4>
+                <p>
+                  To assess the precision of tool usage, we evaluate whether each tool invocation is semantically
+                  appropriate for its corresponding reasoning step and free of execution errors. The tool effectiveness
+                  is defined as:
+                </p>
+                $$
+                \text{Effect}_{\text{tool}}
+                =
+                \frac{1}{N_{\text{tool}}}
+                \sum_{i=1}^{N_{\text{tool}}}
+                \text{valid}_{\text{GPT-5}}(t_i \mid s_i),
+                $$
+                <p>
+                  where $N_{\text{tool}}$ denotes the total number of tool invocations, $t_i \in \mathcal{T}$ is the
+                  tool invoked at step $i$, and $\text{valid}_{\text{GPT-5}}(\cdot) \in \{0,1\}$ is a semantic validity
+                  judgment provided by GPT-5.
+                </p>
               </div>
             </div>
           </div>
         </div>
   </section>
 
-
-  <section class="section">
-    <div class="container">
-
-      <div class="columns is-centered">
-        <div class="column is-full has-text-centered content">
-          <h2 class="title is-3" id="leaderboard">Leaderboard</h2>
-          <div class="content">
-            <table class="js-sort-table" id="results">
-              <thead>
-                <tr>
-                  <th rowspan="2" style="vertical-align: middle;"><strong>#</strong></th>
-                  <th rowspan="2" style="vertical-align: middle;"><strong>Model</strong></th>
-                  <th colspan="1" style="vertical-align: middle;"><strong>Adaptive Mode Selection</strong></th>
-                  <th colspan="2" style="vertical-align: middle;"><strong>Reasoning Process Quality</strong></th>
-                  <th colspan="3" style="vertical-align: middle;"><strong>Reasoning Process Efficiency</strong></th>
-                </tr>
-                <tr>
-                  <th><strong>MCC</strong></th>
-                  <th><strong>Key Step Coverage</strong></th>
-                  <th><strong>Tool Effectiveness</strong></th>
-                  <th><strong>Step</strong></th>
-                  <th><strong>Tool</strong></th>
-                  <th><strong>Tokens</strong></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>GPT-5</td>
-                  <td><b>0.41</b></td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Qwen3-vl-235B-Instruct</td>
-                  <td>0.26</td>
-                  <td><b>84.83</b></td>
-                  <td>89.64</td>
-                  <td>2.04</td>
-                  <td>1.04</td>
-                  <td>7531.95</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Gemini-3-Pro</td>
-                  <td>0.24</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>PyVision</td>
-                  <td>0.20</td>
-                  <td>77.43</td>
-                  <td>62.02</td>
-                  <td>2.76</td>
-                  <td>1.76</td>
-                  <td><b>2481.00</b></td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>AdaptVision</td>
-                  <td>0.17</td>
-                  <td>72.60</td>
-                  <td>81.70</td>
-                  <td>1.51</td>
-                  <td>0.51</td>
-                  <td>4175.96</td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>Qwen3-vl-32B-Instruct</td>
-                  <td>0.14</td>
-                  <td>83.79</td>
-                  <td><b>92.98</b></td>
-                  <td>2.42</td>
-                  <td>1.44</td>
-                  <td>7725.99</td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td>PixelReasoner</td>
-                  <td>0.11</td>
-                  <td>76.02</td>
-                  <td>56.51</td>
-                  <td>1.37</td>
-                  <td>0.37</td>
-                  <td>4229.00</td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>Qwen3-vl-8B-Instruct</td>
-                  <td>0.06</td>
-                  <td>78.40</td>
-                  <td>91.62</td>
-                  <td>1.76</td>
-                  <td>1.20</td>
-                  <td>8282.40</td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>Deepeyes v2</td>
-                  <td>0.03</td>
-                  <td>75.14</td>
-                  <td>56.79</td>
-                  <td>2.09</td>
-                  <td>1.09</td>
-                  <td>6918.90</td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>Thyme</td>
-                  <td>0.01</td>
-                  <td>77.14</td>
-                  <td>56.50</td>
-                  <td><b>1.05</b></td>
-                  <td><b>0.06</b></td>
-                  <td>6708.47</td>
-                </tr>
-                <tr>
-                  <td>11</td>
-                  <td>Deepeyes</td>
-                  <td>0.00</td>
-                  <td>75.56</td>
-                  <td>50.99</td>
-                  <td>2.00</td>
-                  <td>1.68</td>
-                  <td>7601.45</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- <hr style="width: 60%; border-top: 1px solid #e0e0e0; margin: 40px auto;"> -->
-
-  <section class="section" id="Performance">
+  <section class="section" id="AdaptMMBench Benchmark">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column">
-          <!-- <h2 class="title is-3" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Performance</h2> -->
+          <h2 class="title is-3 custom-heading">Method</h2>
 
-          <h2 class="title is-3 section-title" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Performance</h2>
-          <hr class="section-line">
-          <h3 class="subsection-title">Adaptive Case Study</h3>
-          <img src="assets/images/adaptive_case_2.png" class="interpolation-image" alt=""
-            style="display: block; margin-left: auto; margin-right: auto; width: 100%; margin-bottom: 1rem;" />
-          <img src="assets/images/adaptive_case_1.png" class="interpolation-image" alt=""
-            style="display: block; margin-left: auto; margin-right: auto; width: 100%;" />
-
-
-          <!-- <div class="content has-text-justified"> -->
-
-          <div class="section-spacer"></div>
-          <h3 class="subsection-title">Visualized Reasoning Cases</h3>
-
-
-          <!-- case 1 -->
-          <div class="columns is-vcentered">
-
-            <!-- img -->
-            <div class="column is-6">
-              <figure class="image">
-                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
-                <img src="assets/images/case1.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
-
-              </figure>
-            </div>
-
-
-            <!-- text -->
-            <div class="column is-6 has-text-left reasoning-block">
-              <p>
-                <strong>Query:</strong> Is the color of the bus red or yellow?<br>
-                (A) yellow<br>
-                (B) red<br>
-                Answer with the option's letter from the given choices directly.
-              </p>
-
-              <p><strong>Output:</strong></p>
-
-              <p class="justified-output">
-                <span class="tag-label">&lt;think&gt;</span>
-                To determine the color of the bus, I need to closely observe the bus in the image.
-                The bus is clearly visible, and its color can be seen distinctly as red.
-                <span class="tag-label">&lt;/think&gt;</span>
-              </p>
-
-              <p><span class="tag-label">&lt;answer&gt;</span> B <span class="tag-label">&lt;/answer&gt;</span></p>
-            </div>
-
-          </div>
+          <div class="content has-text-justified">
+            <img src="assets/images/overview_data.png" class="interpolation-image" alt=""
+              style="display: block; margin-left: auto; margin-right: auto" width="900" />
+            <p style="font-size: 125%">
 
 
 
+            <section class="section">
+              <div class="container">
+
+                <div class="columns is-centered">
+                  <div class="column is-full has-text-centered content">
+                    <h2 class="title is-3" id="leaderboard">Leaderboard</h2>
+                    <div class="content">
+                      <table class="js-sort-table" id="results">
+                        <thead>
+                          <tr>
+                            <th rowspan="2" style="vertical-align: middle;"><strong>#</strong></th>
+                            <th rowspan="2" style="vertical-align: middle;"><strong>Model</strong></th>
+                            <th colspan="1" style="vertical-align: middle;"><strong>Adaptive Mode Selection</strong>
+                            </th>
+                            <th colspan="2" style="vertical-align: middle;"><strong>Reasoning Process Quality</strong>
+                            </th>
+                            <th colspan="3" style="vertical-align: middle;"><strong>Reasoning Process
+                                Efficiency</strong></th>
+                          </tr>
+                          <tr>
+                            <th><strong>MCC</strong></th>
+                            <th><strong>Key Step Coverage</strong></th>
+                            <th><strong>Tool Effectiveness</strong></th>
+                            <th><strong>Step</strong></th>
+                            <th><strong>Tool</strong></th>
+                            <th><strong>Tokens</strong></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>GPT-5</td>
+                            <td><b>0.41</b></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Qwen3-vl-235B-Instruct</td>
+                            <td>0.26</td>
+                            <td><b>84.83</b></td>
+                            <td>89.64</td>
+                            <td>2.04</td>
+                            <td>1.04</td>
+                            <td>7531.95</td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>Gemini-3-Pro</td>
+                            <td>0.24</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                          </tr>
+                          <tr>
+                            <td>4</td>
+                            <td>PyVision</td>
+                            <td>0.20</td>
+                            <td>77.43</td>
+                            <td>62.02</td>
+                            <td>2.76</td>
+                            <td>1.76</td>
+                            <td><b>2481.00</b></td>
+                          </tr>
+                          <tr>
+                            <td>5</td>
+                            <td>AdaptVision</td>
+                            <td>0.17</td>
+                            <td>72.60</td>
+                            <td>81.70</td>
+                            <td>1.51</td>
+                            <td>0.51</td>
+                            <td>4175.96</td>
+                          </tr>
+                          <tr>
+                            <td>6</td>
+                            <td>Qwen3-vl-32B-Instruct</td>
+                            <td>0.14</td>
+                            <td>83.79</td>
+                            <td><b>92.98</b></td>
+                            <td>2.42</td>
+                            <td>1.44</td>
+                            <td>7725.99</td>
+                          </tr>
+                          <tr>
+                            <td>7</td>
+                            <td>PixelReasoner</td>
+                            <td>0.11</td>
+                            <td>76.02</td>
+                            <td>56.51</td>
+                            <td>1.37</td>
+                            <td>0.37</td>
+                            <td>4229.00</td>
+                          </tr>
+                          <tr>
+                            <td>8</td>
+                            <td>Qwen3-vl-8B-Instruct</td>
+                            <td>0.06</td>
+                            <td>78.40</td>
+                            <td>91.62</td>
+                            <td>1.76</td>
+                            <td>1.20</td>
+                            <td>8282.40</td>
+                          </tr>
+                          <tr>
+                            <td>9</td>
+                            <td>Deepeyes v2</td>
+                            <td>0.03</td>
+                            <td>75.14</td>
+                            <td>56.79</td>
+                            <td>2.09</td>
+                            <td>1.09</td>
+                            <td>6918.90</td>
+                          </tr>
+                          <tr>
+                            <td>10</td>
+                            <td>Thyme</td>
+                            <td>0.01</td>
+                            <td>77.14</td>
+                            <td>56.50</td>
+                            <td><b>1.05</b></td>
+                            <td><b>0.06</b></td>
+                            <td>6708.47</td>
+                          </tr>
+                          <tr>
+                            <td>11</td>
+                            <td>Deepeyes</td>
+                            <td>0.00</td>
+                            <td>75.56</td>
+                            <td>50.99</td>
+                            <td>2.00</td>
+                            <td>1.68</td>
+                            <td>7601.45</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+
+            <!-- <hr style="width: 60%; border-top: 1px solid #e0e0e0; margin: 40px auto;"> -->
+
+            <section class="section" id="Performance">
+              <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                  <div class="column">
+                    <!-- <h2 class="title is-3" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Performance</h2> -->
+
+                    <h2 class="title is-3 section-title" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">
+                      Performance</h2>
+                    <hr class="section-line">
+                    <h3 class="subsection-title">Adaptive Case Study</h3>
+                    <img src="assets/images/adaptive_case_2.png" class="interpolation-image" alt=""
+                      style="display: block; margin-left: auto; margin-right: auto; width: 100%; margin-bottom: 1rem;" />
+                    <img src="assets/images/adaptive_case_1.png" class="interpolation-image" alt=""
+                      style="display: block; margin-left: auto; margin-right: auto; width: 100%;" />
+
+
+                    <!-- <div class="content has-text-justified"> -->
+
+                    <div class="section-spacer"></div>
+                    <h3 class="subsection-title">Visualized Reasoning Cases</h3>
+
+
+                    <!-- case 1 -->
+                    <div class="columns is-vcentered">
+
+                      <!-- img -->
+                      <div class="column is-6">
+                        <figure class="image">
+                          <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                          <img src="assets/images/case1.jpg"
+                            style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+                        </figure>
+                      </div>
+
+
+                      <!-- text -->
+                      <div class="column is-6 has-text-left reasoning-block">
+                        <p>
+                          <strong>Query:</strong> Is the color of the bus red or yellow?<br>
+                          (A) yellow<br>
+                          (B) red<br>
+                          Answer with the option's letter from the given choices directly.
+                        </p>
+
+                        <p><strong>Output:</strong></p>
+
+                        <p class="justified-output">
+                          <span class="tag-label">&lt;think&gt;</span>
+                          To determine the color of the bus, I need to closely observe the bus in the image.
+                          The bus is clearly visible, and its color can be seen distinctly as red.
+                          <span class="tag-label">&lt;/think&gt;</span>
+                        </p>
+
+                        <p><span class="tag-label">&lt;answer&gt;</span> B <span
+                            class="tag-label">&lt;/answer&gt;</span></p>
+                      </div>
+
+                    </div>
 
 
 
-          <!-- case 2 -->
-          <div class="columns is-vcentered">
-
-            <!-- img -->
-            <div class="column is-6">
-              <figure class="image">
-                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
-                <img src="assets/images/case2.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
-
-              </figure>
-            </div>
 
 
-            <!-- text -->
-            <div class="column is-6 has-text-left reasoning-block">
-              <p>
-                <strong>Query:</strong> What is the color of the woman's jacket?<br>
-                (A) black<br>
-                (B) red<br>
-                (C) blue<br>
-                (D) orange<br>
-                Answer with the option's letter from the given choices directly.
-              </p>
 
-              <p><strong>Output:</strong></p>
+                    <!-- case 2 -->
+                    <div class="columns is-vcentered">
 
-              <p class="justified-output">
-                <!-- <span class="tag-label">&lt;think&gt;</span>
+                      <!-- img -->
+                      <div class="column is-6">
+                        <figure class="image">
+                          <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                          <img src="assets/images/case2.jpg"
+                            style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+                        </figure>
+                      </div>
+
+
+                      <!-- text -->
+                      <div class="column is-6 has-text-left reasoning-block">
+                        <p>
+                          <strong>Query:</strong> What is the color of the woman's jacket?<br>
+                          (A) black<br>
+                          (B) red<br>
+                          (C) blue<br>
+                          (D) orange<br>
+                          Answer with the option's letter from the given choices directly.
+                        </p>
+
+                        <p><strong>Output:</strong></p>
+
+                        <p class="justified-output">
+                          <!-- <span class="tag-label">&lt;think&gt;</span>
                 To determine the color of the woman's jacket, I need to closely examine the area where she is located.
                 However, the color details are not immediately clear due to the distance and lighting conditions. To
                 improve visibility, I proceed step by step. I first identify the bounding box corresponding to the
@@ -564,73 +639,78 @@
                 <span class="zoomin-label">&lt;|image_zoomin|&gt;</span>,
                 which reveals that the jacket is light blue.
                 <span class="tag-label">&lt;/think&gt;</span> -->
-                <span class="tag-label">&lt;think&gt;</span>
-                To determine the color of the woman's jacket, I need to closely examine the area where she is located.
-                However, the color details are not immediately clear due to the distance and lighting conditions. To
-                improve visibility, I proceed step by step. I first identify the bounding box corresponding to the
-                woman.
-                <span class="tag-label">&lt;/think&gt;</span>
-              </p>
+                          <span class="tag-label">&lt;think&gt;</span>
+                          To determine the color of the woman's jacket, I need to closely examine the area where she is
+                          located.
+                          However, the color details are not immediately clear due to the distance and lighting
+                          conditions. To
+                          improve visibility, I proceed step by step. I first identify the bounding box corresponding to
+                          the
+                          woman.
+                          <span class="tag-label">&lt;/think&gt;</span>
+                        </p>
 
-              <div>
-                <span class="tag-label">&lt;tool_call&gt;</span>
-                <pre class="json-content"
-                  style="white-space: pre; font-family: monospace; margin: 0; padding: 0; background: transparent;">{
+                        <div>
+                          <span class="tag-label">&lt;tool_call&gt;</span>
+                          <pre class="json-content"
+                            style="white-space: pre; font-family: monospace; margin: 0; padding: 0; background: transparent;">{
   "name": "image_zoom_in_tool",
   "arguments": {
     "bbox_2d": [570, 1726, 615, 1848]
   }
 }</pre>
-                <span class="tag-label">&lt;/tool_call&gt;</span>
-              </div>
+                          <span class="tag-label">&lt;/tool_call&gt;</span>
+                        </div>
 
-              <p>
-                <span class="tag-label">&lt;think&gt;</span>
-                This reveals that the jacket is light blue.
-                <span class="tag-label">&lt;/think&gt;</span>
-              </p>
+                        <p>
+                          <span class="tag-label">&lt;think&gt;</span>
+                          This reveals that the jacket is light blue.
+                          <span class="tag-label">&lt;/think&gt;</span>
+                        </p>
 
-              <p><span class="tag-label">&lt;answer&gt;</span> C <span class="tag-label">&lt;/answer&gt;</span></p>
-            </div>
+                        <p><span class="tag-label">&lt;answer&gt;</span> C <span
+                            class="tag-label">&lt;/answer&gt;</span></p>
+                      </div>
 
-          </div>
-
-
-
+                    </div>
 
 
 
 
 
 
-          <!-- case 3 -->
-          <div class="columns is-vcentered">
-
-            <!-- img -->
-            <div class="column is-6">
-              <figure class="image">
-                <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
-                <img src="assets/images/case3.jpg" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
-
-              </figure>
-            </div>
 
 
-            <!-- text -->
-            <div class="column is-6 has-text-left reasoning-block">
-              <p>
-                <strong>Query:</strong> What is the color of the lock?<br>
-                (A) yellow<br>
-                (B) silver<br>
-                (C) golden<br>
-                (D) red<br>
-                Answer with the option's letter from the given choices directly.
-              </p>
 
-              <p><strong>Output:</strong></p>
+                    <!-- case 3 -->
+                    <div class="columns is-vcentered">
 
-              <!-- <p class="justified-output"> -->
-              <!-- <span class="tag-label">&lt;think&gt;</span>
+                      <!-- img -->
+                      <div class="column is-6">
+                        <figure class="image">
+                          <!-- <img src="assets/images/case1.jpg" alt="hhh" style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" /> -->
+                          <img src="assets/images/case3.jpg"
+                            style="border-radius: 8px; box-shadow: 0 0 16px rgba(0,0,0,0.1);" />
+
+                        </figure>
+                      </div>
+
+
+                      <!-- text -->
+                      <div class="column is-6 has-text-left reasoning-block">
+                        <p>
+                          <strong>Query:</strong> What is the color of the lock?<br>
+                          (A) yellow<br>
+                          (B) silver<br>
+                          (C) golden<br>
+                          (D) red<br>
+                          Answer with the option's letter from the given choices directly.
+                        </p>
+
+                        <p><strong>Output:</strong></p>
+
+                        <!-- <p class="justified-output"> -->
+                        <!-- <span class="tag-label">&lt;think&gt;</span>
                 To determine the color of the lock, I need to closely examine the area where the lock is located.
                 However, the lock is not immediately visible, making it difficult to identify its color. To improve
                 visibility, I proceed step by step. I first attempt to locate the lock but find no clear indication due
@@ -649,80 +729,93 @@
                 <span class="zoomin-label">&lt;|image_zoomin|&gt;</span>, which reveals the presence of a mailbox. Upon
                 analyzing this refined area, I confirm that the lock on the mailbox is silver.
                 <span class="tag-label">&lt;/think&gt;</span> -->
-              <!-- </p> -->
+                        <!-- </p> -->
 
-              <span class="tag-label">&lt;think&gt;</span>
-              To determine the color of the lock, I need to closely examine the area where the lock is located. However,
-              the lock is not immediately visible, making it difficult to identify its color. To improve visibility, I
-              proceed step by step. I first attempt to locate the lock but find no clear indication due to its small
-              size. I then focus on the red postbox, identifying two bounding boxes: [585, 700, 1305, 1821] and [645,
-              920, 1275, 1821]. I analyze these areas but still cannot locate the lock. Next, I shift my attention to
-              the area above the postbox, locating two bounding boxes: [0, 600, 1425, 1241] and [0, 600, 1425, 1301]. I
-              zoom in the boundingbox.
-              <span class="tag-label">&lt;/think&gt;</span>
-              </p>
+                        <span class="tag-label">&lt;think&gt;</span>
+                        To determine the color of the lock, I need to closely examine the area where the lock is
+                        located. However,
+                        the lock is not immediately visible, making it difficult to identify its color. To improve
+                        visibility, I
+                        proceed step by step. I first attempt to locate the lock but find no clear indication due to its
+                        small
+                        size. I then focus on the red postbox, identifying two bounding boxes: [585, 700, 1305, 1821]
+                        and [645,
+                        920, 1275, 1821]. I analyze these areas but still cannot locate the lock. Next, I shift my
+                        attention to
+                        the area above the postbox, locating two bounding boxes: [0, 600, 1425, 1241] and [0, 600, 1425,
+                        1301]. I
+                        zoom in the boundingbox.
+                        <span class="tag-label">&lt;/think&gt;</span>
+                        </p>
 
-              <div>
-                <span class="tag-label">&lt;tool_call&gt;</span>
-                <pre class="json-content"
-                  style="white-space: pre; font-family: monospace; margin: 0; padding: 0; background: transparent;">{
+                        <div>
+                          <span class="tag-label">&lt;tool_call&gt;</span>
+                          <pre class="json-content"
+                            style="white-space: pre; font-family: monospace; margin: 0; padding: 0; background: transparent;">{
   "name": "image_zoom_in_tool",
   "arguments": {
     "bbox_2d": [0, 600, 1425, 1241]
   }
 }</pre>
-                <span class="tag-label">&lt;/tool_call&gt;</span>
-              </div>
+                          <span class="tag-label">&lt;/tool_call&gt;</span>
+                        </div>
 
-              <p>
-                <span class="tag-label">&lt;think&gt;</span>
-                This reveals the presence of a mailbox.Upon analyzing this refined area, I confirm that the lock on the
-                mailbox is silver.
-                <span class="tag-label">&lt;/think&gt;</span>
-              </p>
+                        <p>
+                          <span class="tag-label">&lt;think&gt;</span>
+                          This reveals the presence of a mailbox.Upon analyzing this refined area, I confirm that the
+                          lock on the
+                          mailbox is silver.
+                          <span class="tag-label">&lt;/think&gt;</span>
+                        </p>
 
-              <p><span class="tag-label">&lt;answer&gt;</span> B <span class="tag-label">&lt;/answer&gt;</span></p>
-
-
-
-
-
-            </div>
-          </div>
-        </div>
-  </section>
+                        <p><span class="tag-label">&lt;answer&gt;</span> B <span
+                            class="tag-label">&lt;/answer&gt;</span></p>
 
 
 
 
-  <section class="hero is-light" id="Conclusion">
-    <div class="hero-body">
-      <div class="container is-max-widescreen">
-        <!-- Generalization Videos -->
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-full-width">
-            <h2 class="title is-3 custom-heading">Conclusion</h2>
-            <div class="column">
-              <div class="content has-text-justified">
-                <p style="font-size: 125%">
-                  In this paper, we present adaptive chain-of-focus (Adaptive-CoF), a framework that enables VLMs to
-                  adaptively perform fine-grained visual search and zooming. Through a two-stage training pipeline
-                  combining supervised fine-tuning and reinforcement learning, Adaptive-CoF learns to balance detailed
-                  perception with computational efficiency, overcoming the trade-off between static viewing and
-                  exhaustive zooming. Experiments demonstrate state-of-the-art performance on challenging benchmarks
-                  with significantly reduced computational cost. </p>
 
-              </div>
-            </div>
+                      </div>
+                    </div>
+                  </div>
+            </section>
 
-          </div>
-        </div>
-  </section>
 
-  <section class="section" id="BibTeX">
-    <div class="container is-max-widescreen content">
-      <h2 class="title">BibTeX</h2>
-      <!-- <pre><code>@misc{zhang2025chain,
+
+
+            <section class="hero is-light" id="Conclusion">
+              <div class="hero-body">
+                <div class="container is-max-widescreen">
+                  <!-- Generalization Videos -->
+                  <div class="columns is-centered has-text-centered">
+                    <div class="column is-full-width">
+                      <h2 class="title is-3 custom-heading">Conclusion</h2>
+                      <div class="column">
+                        <div class="content has-text-justified">
+                          <p style="font-size: 125%">
+                            In this paper, we present adaptive chain-of-focus (Adaptive-CoF), a framework that enables
+                            VLMs to
+                            adaptively perform fine-grained visual search and zooming. Through a two-stage training
+                            pipeline
+                            combining supervised fine-tuning and reinforcement learning, Adaptive-CoF learns to balance
+                            detailed
+                            perception with computational efficiency, overcoming the trade-off between static viewing
+                            and
+                            exhaustive zooming. Experiments demonstrate state-of-the-art performance on challenging
+                            benchmarks
+                            with significantly reduced computational cost. </p>
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+            </section>
+
+            <section class="section" id="BibTeX">
+              <div class="container is-max-widescreen content">
+                <h2 class="title">BibTeX</h2>
+                <!-- <pre><code>@misc{zhang2025chain,
       title={Adaptive Chain-of-Focus Reasoning via Dynamic Visual Searchand Zooming for Efficient VLMs}, 
       author={Xintong Zhang and Zhi Gao and Bofei Zhang and Pengxiang Li and Xiaowen Zhang and Yang Liu and Tao Yuan and Yuwei Wu and Yunde Jia and Song-Chun Zhu and Qing Li},
       year={2025},
@@ -730,7 +823,7 @@
       archivePrefix={arXiv},
       primaryClass={cs.CV},
       url={https://arxiv.org/abs/2505.15436},  -->
-      <pre><code></code>@article{zhang2025chain,
+                <pre><code></code>@article{zhang2025chain,
       title={Adaptive Chain-of-Focus Reasoning via Dynamic Visual Search and Zooming for Efficient VLMs},
       author = {Zhang, Xintong and Gao, Zhi and Zhang, Bofei and Li, Pengxiang and Zhang, Xiaowen and Liu, Yang and Yuan, Tao and Wu, Yuwei and Jia, Yunde and Zhu, Song-Chun and Qing Li},
       journal={arXiv preprint arXiv:2505.15436},
@@ -738,11 +831,11 @@
       }
 
  </code></pre>
-    </div>
-  </section>
+              </div>
+            </section>
 
 
-  <!-- 
+            <!-- 
 <footer class="footer">
   <div class="container">
     <div class="columns is-centered">
@@ -758,7 +851,7 @@
   </div>
 </footer> -->
 
-  <script src="static/js/contents_bar.js"></script>
+            <script src="static/js/contents_bar.js"></script>
 
 
 </body>
