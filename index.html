@@ -88,7 +88,7 @@
 <body>
 
 
-
+  <!-- 
   <d-contents>
     <nav>
       <h4>CONTENTS</h4>
@@ -98,7 +98,7 @@
       <div><a href="#Conclusion">Conclusion</a></div>
     </nav>
   </d-contents>
-
+ -->
 
 
 
@@ -202,9 +202,8 @@
                 </span>
 
 
-                <img src="assets/images/performance.png" class="interpolation-image" alt="" style="display: block; margin-left: auto; margin-right: auto;
-                margin-top: 2rem;
-                width: 1000px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);" />
+                <img src="assets/images/performance.png" class="interpolation-image" alt="" style="display: block; margin-left: auto;
+                width: 500px;" />
 
               </div>
             </div>
@@ -257,15 +256,12 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column">
-          <!-- <h2 class="title is-3" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Method</h2> -->
-
-          <h2 class="title is-3 section-title" style="text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);">Method</h2>
-          <hr class="section-line">
+          <h2 class="title is-3 custom-heading">Method</h2>
 
           <div class="content has-text-justified">
             <img src="assets/images/visual_agent.jpg" class="interpolation-image" alt=""
               style="display: block; margin-left: auto; margin-right: auto" width="900" />
-            <p>
+            <p style="font-size: 125%">
               We build a visual search agent based on the ReAct framework, which solves problems iteratively through a
               Thought-Action loop. When executing visual search tasks, the agent employs a specific strategy of
               progressive $\text{zoom-in}$ or refinement via tool execution (e.g., image processing or focusing
