@@ -253,9 +253,12 @@
                     <span>Leaderboard</span>
                   </a>
                 </span>
-                <img src="assets/images/performance.png" class="interpolation-image" alt="" style="display: block; margin-left: auto; margin-right: auto;
+                <!-- <img src="assets/images/performance.png" class="interpolation-image" alt="" style="display: block; margin-left: auto; margin-right: auto;
                 margin-top: 2rem;
-                width: 1000px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);" />
+                width: 1000px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);" /> -->
+
+                <img src="assets/images/performance.png" class="interpolation-image" alt="" style="display: block; margin-left: auto; margin-right: auto;
+                width: 600px;" />
               </div>
             </div>
           </div>
@@ -266,27 +269,40 @@
 
 
 
-  <section class="section">
+  <section class=" section">
     <div class="container" style="margin-bottom: 2vh;">
       <!-- Abstract. -->
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
           <h2 class="title is-3">Introduction</h2>
           <div class="content has-text-justified">
-            Adaptive multimodal reasoning has emerged as a promising frontier in Vision-Language Models (VLMs), aiming
-            to dynamically modulate between tool-augmented visual reasoning and text reasoning to enhance both
-            effectiveness and efficiency. However, existing evaluations rely on static difficulty labels and simplistic
-            metrics, which fail to capture the dynamic nature of difficulty relative to varying model capacities.
-            Consequently, they obscure the distinction between adaptive mode selection and general performance while
-            neglecting fine-grained process analyses. In this paper, we propose \bench, a comprehensive benchmark for
-            adaptive multimodal reasoning across five domains: real-world, OCR, GUI, knowledge, and math, encompassing
-            both direct perception and complex reasoning tasks. \bench\ utilizes a Matthews Correlation Coefficient
+            Adaptive multimodal reasoning has emerged as a promising frontier in Vision-Language Models
+            (VLMs), aiming
+            to dynamically modulate between tool-augmented visual reasoning and text reasoning to enhance
+            both
+            effectiveness and efficiency. However, existing evaluations rely on static difficulty labels and
+            simplistic
+            metrics, which fail to capture the dynamic nature of difficulty relative to varying model
+            capacities.
+            Consequently, they obscure the distinction between adaptive mode selection and general
+            performance while
+            neglecting fine-grained process analyses. In this paper, we propose \bench, a comprehensive
+            benchmark for
+            adaptive multimodal reasoning across five domains: real-world, OCR, GUI, knowledge, and math,
+            encompassing
+            both direct perception and complex reasoning tasks. \bench\ utilizes a Matthews Correlation
+            Coefficient
             (MCC) metric to evaluate the selection rationality of different reasoning modes, isolating this
-            meta-cognition ability by dynamically identifying task difficulties based on models' capability boundaries.
-            Moreover, \bench\ facilitates multi-dimensional process evaluation across key step coverage, tool
-            effectiveness, and computational efficiency. Our evaluation reveals that while adaptive mode selection
-            scales with model capacity, it notably decouples from final accuracy. Conversely, key step coverage aligns
-            with performance, though tool effectiveness remains highly inconsistent across model architectures.
+            meta-cognition ability by dynamically identifying task difficulties based on models' capability
+            boundaries.
+            Moreover, \bench\ facilitates multi-dimensional process evaluation across key step coverage,
+            tool
+            effectiveness, and computational efficiency. Our evaluation reveals that while adaptive mode
+            selection
+            scales with model capacity, it notably decouples from final accuracy. Conversely, key step
+            coverage aligns
+            with performance, though tool effectiveness remains highly inconsistent across model
+            architectures.
           </div>
         </div>
       </div>
