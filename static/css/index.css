@@ -142,17 +142,10 @@ body {
     border-radius: 10px;
     padding: 0;
     font-size: 0;
-    width: 100% !important;
-    flex: 0 0 100% !important;
 }
 
 .results-carousel video {
     margin: 0;
-}
-
-.results-carousel .box {
-    width: 100% !important;
-    margin: 0 auto;
 }
 
 
@@ -474,7 +467,8 @@ d-contents nav>ul>li>a:hover {
 }
 
 /* Leaderboard Table Styles */
-#results {
+#results,
+#accuracy-results {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
@@ -487,7 +481,8 @@ d-contents nav>ul>li>a:hover {
     /* For rounded corners */
 }
 
-#results thead tr {
+#results thead tr,
+#accuracy-results thead tr {
     background-color: #f2f2f2;
     color: #333333;
     text-align: left;
@@ -496,12 +491,15 @@ d-contents nav>ul>li>a:hover {
 }
 
 #results th,
-#results td {
+#results td,
+#accuracy-results th,
+#accuracy-results td {
     padding: 12px 15px;
     border-bottom: 1px solid #dddddd;
 }
 
-#results th {
+#results th,
+#accuracy-results th {
     font-weight: 600;
     text-transform: none;
     font-size: 0.85em;
@@ -512,13 +510,17 @@ d-contents nav>ul>li>a:hover {
 
 /* Specific alignments */
 #results th:first-child,
-#results td:first-child {
+#results td:first-child,
+#accuracy-results th:first-child,
+#accuracy-results td:first-child {
     text-align: center;
     width: 40px;
 }
 
 #results th:nth-child(2),
-#results td:nth-child(2) {
+#results td:nth-child(2),
+#accuracy-results th:nth-child(2),
+#accuracy-results td:nth-child(2) {
     text-align: left;
     font-weight: 600;
     color: #2a2a2a;
@@ -526,33 +528,40 @@ d-contents nav>ul>li>a:hover {
 
 /* Center align data columns */
 #results th:nth-child(n+3),
-#results td:nth-child(n+3) {
+#results td:nth-child(n+3),
+#accuracy-results th:nth-child(n+3),
+#accuracy-results td:nth-child(n+3) {
     text-align: center;
 }
 
-#results tbody tr {
+#results tbody tr,
+#accuracy-results tbody tr {
     background-color: #ffffff;
     transition: background-color 0.2s ease;
 }
 
 /* Zebra Striping */
-#results tbody tr:nth-of-type(even) {
+#results tbody tr:nth-of-type(even),
+#accuracy-results tbody tr:nth-of-type(even) {
     background-color: #f9f9f9;
 }
 
 /* Hover Effect */
-#results tbody tr:hover {
+#results tbody tr:hover,
+#accuracy-results tbody tr:hover {
     background-color: #f1f1f1;
     cursor: default;
 }
 
 /* Last row border removal for rounded corners effect */
-#results tbody tr:last-of-type {
+#results tbody tr:last-of-type,
+#accuracy-results tbody tr:last-of-type {
     border-bottom: 2px solid #4a4a4a;
 }
 
 /* Highlighted/Bold cells specific color tweak if needed */
-#results b {
+#results b,
+#accuracy-results b {
     color: #0277bd;
     /* Darker blue for text readability */
     background-color: #e1f5fe;

@@ -419,31 +419,32 @@
       <div class="column">
         <h3 class="title is-4" style="margin-top: 2rem; margin-bottom: 1rem;">Accuracy</h3>
         <div class="content">
-          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.8rem;">
+          <table class="js-sort-table" id="accuracy-results">
             <thead>
               <tr>
-                <th rowspan="2">Model</th>
-                <th rowspan="2">Mode</th>
-                <th colspan="2">Real-world</th>
-                <th colspan="2">OCR</th>
-                <th colspan="2">GUI</th>
-                <th colspan="2">Knowledge</th>
-                <th colspan="2">Math (w/o aux)</th>
-                <th colspan="2">Overall Accuracy</th>
+                <th rowspan="2" style="vertical-align: middle;"><strong>#</strong></th>
+                <th rowspan="2" style="vertical-align: middle;"><strong>Model</strong></th>
+                <th rowspan="2" style="vertical-align: middle;"><strong>Mode</strong></th>
+                <th colspan="2" style="vertical-align: middle;"><strong>Real-world</strong></th>
+                <th colspan="2" style="vertical-align: middle;"><strong>OCR</strong></th>
+                <th colspan="2" style="vertical-align: middle;"><strong>GUI</strong></th>
+                <th colspan="2" style="vertical-align: middle;"><strong>Knowledge</strong></th>
+                <th colspan="2" style="vertical-align: middle;"><strong>Math (w/o aux)</strong></th>
+                <th colspan="2" style="vertical-align: middle;"><strong>Overall Accuracy</strong></th>
               </tr>
               <tr>
-                <th>w/o enh.</th>
-                <th>All</th>
-                <th>w/o enh.</th>
-                <th>All</th>
-                <th>w/o enh.</th>
-                <th>All</th>
-                <th>w/o enh.</th>
-                <th>All</th>
-                <th>w/o enh.</th>
-                <th>All</th>
-                <th>w/o enh.</th>
-                <th>All</th>
+                <th><strong>w/o enh.</strong></th>
+                <th><strong>All</strong></th>
+                <th><strong>w/o enh.</strong></th>
+                <th><strong>All</strong></th>
+                <th><strong>w/o enh.</strong></th>
+                <th><strong>All</strong></th>
+                <th><strong>w/o enh.</strong></th>
+                <th><strong>All</strong></th>
+                <th><strong>w/o enh.</strong></th>
+                <th><strong>All</strong></th>
+                <th><strong>w/o enh.</strong></th>
+                <th><strong>All</strong></th>
               </tr>
             </thead>
             <tbody>
@@ -451,6 +452,7 @@
 
               <!-- Gemini-3-Pro -->
               <tr>
+                <td rowspan="3">1</td>
                 <td rowspan="3">Gemini-3-Pro*</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">59.17</td>
@@ -499,6 +501,7 @@
 
               <!-- GPT-5 -->
               <tr>
+                <td rowspan="3">2</td>
                 <td rowspan="3">GPT-5*</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">46.67</td>
@@ -549,6 +552,7 @@
 
               <!-- Qwen3-vl-235B-Instruct -->
               <tr>
+                <td rowspan="3">3</td>
                 <td rowspan="3">Qwen3-vl<br>-235B-Instruct</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">59.58</td>
@@ -597,6 +601,7 @@
 
               <!-- Qwen3-vl-32B-Instruct -->
               <tr>
+                <td rowspan="3">4</td>
                 <td rowspan="3">Qwen3-vl<br>-32B-Instruct</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">55.83</td>
@@ -645,6 +650,7 @@
 
               <!-- Qwen3-vl-8B-Instruct -->
               <tr>
+                <td rowspan="3">5</td>
                 <td rowspan="3">Qwen3-vl<br>-8B-Instruct</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">56.25</td>
@@ -693,6 +699,7 @@
 
               <!-- AdaptVision -->
               <tr>
+                <td rowspan="3">6</td>
                 <td rowspan="3">AdaptVision</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">45.83</td>
@@ -741,6 +748,7 @@
 
               <!-- Deepeyes v2 -->
               <tr>
+                <td rowspan="3">7</td>
                 <td rowspan="3">Deepeyes v2*</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">58.75</td>
@@ -789,6 +797,7 @@
 
               <!-- PyVision -->
               <tr>
+                <td rowspan="3">8</td>
                 <td rowspan="3">PyVision*</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">40.00</td>
@@ -837,6 +846,7 @@
 
               <!-- Thyme -->
               <tr>
+                <td rowspan="3">9</td>
                 <td rowspan="3">Thyme*</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">55.00</td>
@@ -885,6 +895,7 @@
 
               <!-- Deepeyes -->
               <tr>
+                <td rowspan="3">10</td>
                 <td rowspan="3">Deepeyes</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">50.00</td>
@@ -933,6 +944,7 @@
 
               <!-- PixelReasoner -->
               <tr>
+                <td rowspan="3">11</td>
                 <td rowspan="3">PixelReasoner</td>
                 <td style="color: #595959;">Text</td>
                 <td style="color: #595959;">42.08</td>
