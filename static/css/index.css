@@ -540,7 +540,17 @@ d-contents nav>ul>li>a:hover {
 /* Overall Accuracy columns (4th and 5th) should not be bold */
 #accuracy-results td:nth-child(4),
 #accuracy-results td:nth-child(5) {
-    font-weight: normal;
+    font-weight: normal !important;
+}
+
+/* MCC column (3rd column) in Mode Selection leaderboard should be bold */
+#results td:nth-child(3) {
+    font-weight: bold;
+}
+
+/* Adaptive rows in Accuracy leaderboard should have bold numbers */
+#accuracy-results tr.adaptive-row td {
+    font-weight: bold;
 }
 
 #results tbody tr,
@@ -568,25 +578,43 @@ d-contents nav>ul>li>a:hover {
     border-bottom: 2px solid #4a4a4a;
 }
 
-/* Highlighted/Bold cells specific color tweak if needed */
-#results b,
-#accuracy-results b {
+/* Highlighted cells in Mode Selection - NOT bold (except MCC column uses td style) */
+#results b {
     color: #2a2a2a !important;
-    /* Dark text for readability */
     background-color: #e1f5fe;
-    /* Light blue background */
     font-weight: normal;
-    /* Remove bold as requested */
     padding: 2px 6px;
     border-radius: 4px;
 }
 
-/* Green highlight for cells - same format as blue */
-#results b.green,
-#accuracy-results b.green {
+/* MCC column (3rd column) b tags should be bold */
+#results td:nth-child(3) b {
+    font-weight: bold;
+}
+
+/* Highlighted cells in Accuracy - bold */
+#accuracy-results b {
+    color: #2a2a2a !important;
+    background-color: #e1f5fe;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Green highlight for Mode Selection - NOT bold */
+#results b.green {
     color: #2a2a2a;
     background-color: #e8f5e9;
     font-weight: normal;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Green highlight for Accuracy - bold */
+#accuracy-results b.green {
+    color: #2a2a2a;
+    background-color: #e8f5e9;
+    font-weight: bold;
     padding: 2px 6px;
     border-radius: 4px;
 }
