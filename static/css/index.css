@@ -537,6 +537,12 @@ d-contents nav>ul>li>a:hover {
     text-align: center;
 }
 
+/* Overall Accuracy columns (4th and 5th) should not be bold */
+#accuracy-results td:nth-child(4),
+#accuracy-results td:nth-child(5) {
+    font-weight: normal;
+}
+
 #results tbody tr,
 #accuracy-results tbody tr {
     background-color: #ffffff;
@@ -565,12 +571,22 @@ d-contents nav>ul>li>a:hover {
 /* Highlighted/Bold cells specific color tweak if needed */
 #results b,
 #accuracy-results b {
-    color: #0277bd;
-    /* Darker blue for text readability */
+    color: #2a2a2a !important;
+    /* Dark text for readability */
     background-color: #e1f5fe;
     /* Light blue background */
     font-weight: normal;
     /* Remove bold as requested */
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Green highlight for cells - same format as blue */
+#results b.green,
+#accuracy-results b.green {
+    color: #2a2a2a;
+    background-color: #e8f5e9;
+    font-weight: normal;
     padding: 2px 6px;
     border-radius: 4px;
 }
