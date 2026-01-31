@@ -972,12 +972,14 @@
     </div>
   </section>
 
-  <section class="section" id="AdaptMMBench Benchmark">
+  <section class="section" id="AdaptMMBench">
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column">
           <h2 class="title is-3 custom-heading">AdaptMMBench</h2>
 
+          <h3 class="subsection-title">Benchmark</h3>
+          <hr class="section-line">
           <div class="content has-text-justified">
             <img src="assets/images/overview_data.png" class="interpolation-image" alt=""
               style="display: block; margin-left: auto; margin-right: auto" width="900" />
@@ -990,17 +992,9 @@
               and GPT-5 collaborate to verify ground truth and key reasoning steps.
             </p>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="section" id="Method">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column">
-          <h2 class="title is-3 custom-heading">Evaluation Method</h2>
-
+          <h3 class="subsection-title">Metrics</h3>
+          <hr class="section-line">
           <div class="content has-text-justified">
             <img src="assets/images/evaluation_strategy.png" class="interpolation-image" alt=""
               style="display: block; margin-left: auto; margin-right: auto" width="900" />
@@ -1014,13 +1008,11 @@
           </div>
 
           <div class="content has-text-justified">
-            <!-- <img src="assets/images/model_inference.jpg" class="interpolation-image" alt=""
-              style="display: block; margin-left: auto; margin-right: auto" width="900" /> -->
             <div class="content has-text-justified">
               <div class="content has-text-justified hover-card" style="padding: 1.5rem;">
                 <h3 class="title is-4">Adaptive Mode Selection Evaluation</h3>
                 <p>
-                  Adaptive intelligence depends on a model’s ability to assess whether its current information is
+                  Adaptive intelligence depends on a model's ability to assess whether its current information is
                   sufficient to solve a task. Consequently, the appropriateness of a reasoning mode should be evaluated
                   independently of answer correctness.
                   Under this principle, the necessity of tool invocation is determined by the outcome of text-only
@@ -1070,7 +1062,7 @@
 
                 <h4 class="title is-5">Key Steps Coverage</h4>
                 <p>
-                  Following the evaluation paradigm of MME, we assess whether a model’s reasoning chain
+                  Following the evaluation paradigm of MME, we assess whether a model's reasoning chain
                   $\{s_i\}_{i=1}^n$ covers the essential human-annotated key steps $K$. We employ GPT-5 as an evaluator
                   to identify the presence of these key steps within the generated reasoning, and define the key step
                   coverage as:
@@ -1084,7 +1076,7 @@
                 \mathbb{I}\!\left[k_i \underset{\text{\tiny GPT-5}}{\in} \{s_1,\dots,s_n\}\right].
                 $$
                 <p>
-                  This metric measures how far the model’s reasoning progresses along the key steps. Rather than
+                  This metric measures how far the model's reasoning progresses along the key steps. Rather than
                   penalizing skipped or compressed steps, KCoverage captures the maximum extent to which the reasoning
                   aligns with the solution structure, allowing different reasoning styles and reflecting how close the
                   model comes to a correct solution.
@@ -1112,6 +1104,8 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
   </section>
 
 
