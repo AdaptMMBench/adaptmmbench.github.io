@@ -81,6 +81,13 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+  </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 </head>
@@ -269,7 +276,7 @@
     <div class="container">
       <div class="columns is-centered has-text-centered">
         <div class="column">
-          <h2 class="title is-3 custom-heading">Leaderboard</h2>
+          <h2 class="title is-3 custom-heading no-bg">Leaderboard</h2>
         </div>
       </div>
 
@@ -985,13 +992,17 @@
           <div class="content has-text-justified">
             <img src="assets/images/overview_data.png" class="interpolation-image" alt=""
               style="display: block; margin-left: auto; margin-right: auto" width="900" />
-            <p style="font-size: 125%">
-              AdaptMMBench encompasses 1,420 samples spanning five domains: real-world, OCR, GUI, math, and knowledge.
-              To ensure a comprehensive evaluation, the dataset includes diverse difficulty levels, balancing tasks
-              solvable via text-only reasoning with those requiring adaptive tool invocation, such as zoom-in and
-              geometric transformations.
-              Benchmark quality is ensured through a rigorous multi-stage verification pipeline, where human annotators
-              and GPT-5 collaborate to verify ground truth and key reasoning steps.
+            <p style="font-size: 125%; margin-top: 1rem;">
+              AdaptMMBench encompasses <strong>1,420 samples</strong> spanning
+              <strong>five domains: real-world, OCR, GUI, math, and
+                knowledge</strong>.
+              To ensure a comprehensive evaluation, the dataset spans a range of difficulty levels, balancing tasks
+              that can be solved through text-only reasoning with those that require
+              <strong>adaptive tool invocation</strong>, such as
+              zooming and image transformations (e.g., rotation and contrast adjustment). Benchmark quality is
+              maintained through a rigorous multi-stage verification pipeline, in which human annotators and GPT-5
+              collaboratively validate <strong>bounding box annotations</strong>
+              and <strong>key reasoning steps</strong>.
             </p>
           </div>
 
@@ -1000,13 +1011,13 @@
           <div class="content has-text-justified">
             <img src="assets/images/evaluation_strategy.png" class="interpolation-image" alt=""
               style="display: block; margin-left: auto; margin-right: auto" width="900" />
-            <p style="font-size: 125%">
+            <!-- <p style="font-size: 125%">
               We build a visual search agent based on the ReAct framework, which solves problems iteratively through a
               Thought-Action loop. When executing visual search tasks, the agent employs a specific strategy of
               progressive $\text{zoom-in}$ or refinement via tool execution (e.g., image processing or focusing
               operations). This method enables the agent to acquire more precise, authentic, and valuable search data to
               guide subsequent reasoning and decision steps.
-            </p>
+            </p> -->
           </div>
 
           <div class="content has-text-justified">
@@ -1014,26 +1025,16 @@
               <div class="content has-text-justified hover-card" style="padding: 1.5rem;">
                 <h3 class="title is-4">Adaptive Mode Selection Evaluation</h3>
                 <p>
-                  Adaptive intelligence depends on a model's ability to assess whether its current information is
-                  sufficient to solve a task. Consequently, the appropriateness of a reasoning mode should be evaluated
-                  independently of answer correctness.
-                  Under this principle, the necessity of tool invocation is determined by the outcome of text-only
-                  reasoning.
+                  Adaptive intelligence depends on a model’s ability to judge whether its available information is
+                  sufficient to solve a task; therefore, reasoning mode selection should be evaluated independently of
+                  answer correctness. Under this principle, tasks solvable via text-only reasoning are labeled
+                  <strong>Tool-Redundant</strong>, while those requiring additional visual information are labeled
+                  <strong>Tool-Required</strong>. Mode selection is evaluated using a confusion matrix, where correct
+                  and incorrect tool invocation decisions correspond to TP, FN, TN, and FP cases.
                 </p>
-                <p>
-                  If a task can be solved using text reasoning alone, it is labeled as <strong>Tool-Redundant</strong>,
-                  indicating that visual tool invocation is unnecessary and may introduce noise. Conversely, tasks that
-                  cannot be solved via text-only reasoning are labeled as <strong>Tool-Required</strong>, indicating
-                  that visual tool invocation is necessary to obtain additional information. This categorization defines
-                  the mode selection labels used in our evaluation. Accordingly, tool invocation decisions are evaluated
-                  using a confusion matrix: TP denotes Tool-Required cases where the model invokes tools, FN denotes
-                  Tool-Required cases where the model does not invoke tools, TN denotes Tool-Redundant cases where the
-                  model selects text-only reasoning, and FP denotes Tool-Redundant cases where the model unnecessarily
-                  invokes tools.
-                </p>
-                <p><strong>Matthews Correlation Coefficient (MCC).</strong> In adaptive mode selection, the proportions
-                  of tool-redundant and tool-required cases are model-dependent, leading to varying degrees of class
-                  imbalance in the resulting confusion matrix. To ensure a robust evaluation, we adopt the MCC:</p>
+                <p><strong>Matthews Correlation Coefficient (MCC).</strong> Because the proportion of tool-redundant and
+                  tool-required cases varies across models, leading to class imbalance, we adopt MCC as a robust
+                  evaluation metric.</p>
 
                 $$
                 \text{MCC} =
@@ -1048,59 +1049,24 @@
 
               <div class="content has-text-justified hover-card" style="padding: 1.5rem; margin-top: 1rem;">
                 <h3 class="title is-4">Reasoning Process Evaluation</h3>
-                <p>
+                <!-- <p>
                   While MCC measures the quality of mode selection, it does not assess the validity of the reasoning
                   process. Models may produce correct answers despite logical errors or improper tool usage. To address
                   this limitation, we introduce three process-oriented metrics to evaluate reasoning coherence and tool
                   execution fidelity.
-                </p>
+                </p> -->
                 <p>
-                  A reasoning trajectory $\mathcal{R}$ is formalized as an interleaved sequence of reasoning steps and
-                  tool invocations:
-                  $$ \mathcal{R} = \{(s_1, t_1), (s_2, t_2), \dots, s_n\}, $$
-                  where $s_i$ is the reasoning at step $i$ and $t_i \in \mathcal{T}$ represents the corresponding tool
-                  invocation. The trajectory terminates at the final reasoning step $s_n$, and produces the answer.
-                </p>
-
-                <h4 class="title is-5">Key Steps Coverage</h4>
-                <p>
-                  Following the evaluation paradigm of MME, we assess whether a model's reasoning chain
-                  $\{s_i\}_{i=1}^n$ covers the essential human-annotated key steps $K$. We employ GPT-5 as an evaluator
-                  to identify the presence of these key steps within the generated reasoning, and define the key step
-                  coverage as:
-                </p>
-                $$
-                \text{KCoverage}
-                =
-                \frac{1}{|K|}
-                \max_j
-                \prod_{i=1}^j
-                \mathbb{I}\!\left[k_i \underset{\text{\tiny GPT-5}}{\in} \{s_1,\dots,s_n\}\right].
-                $$
-                <p>
-                  This metric measures how far the model's reasoning progresses along the key steps. Rather than
-                  penalizing skipped or compressed steps, KCoverage captures the maximum extent to which the reasoning
-                  aligns with the solution structure, allowing different reasoning styles and reflecting how close the
-                  model comes to a correct solution.
-                </p>
-
-                <h4 class="title is-5">Tool Execution Effectiveness</h4>
-                <p>
-                  To assess the precision of tool usage, we evaluate whether each tool invocation is semantically
-                  appropriate for its corresponding reasoning step and free of execution errors. The tool effectiveness
-                  is defined as:
-                </p>
-                $$
-                \text{Effect}_{\text{tool}}
-                =
-                \frac{1}{N_{\text{tool}}}
-                \sum_{i=1}^{N_{\text{tool}}}
-                \text{valid}_{\text{GPT-5}}(t_i \mid s_i),
-                $$
-                <p>
-                  where $N_{\text{tool}}$ denotes the total number of tool invocations, $t_i \in \mathcal{T}$ is the
-                  tool invoked at step $i$, and $\text{valid}_{\text{GPT-5}}(\cdot) \in \{0,1\}$ is a semantic validity
-                  judgment provided by GPT-5.
+                  We evaluate the reasoning process from both <strong>quality</strong> and <strong>efficiency</strong>
+                  perspectives. Reasoning
+                  <strong>quality</strong> is
+                  measured by <strong>key step coverage</strong>, which assesses logical alignment with human-annotated
+                  solution steps,
+                  and <strong>tool execution effectiveness</strong>, which evaluates whether each tool invocation
+                  correctly serves the
+                  intended purpose of its corresponding reasoning step and is executed without errors. Reasoning
+                  <strong>efficiency</strong> is assessed using the number of <strong>reasoning steps</strong>,
+                  <strong>tool invocation frequency</strong>, and <strong>total token
+                    consumption</strong>.
                 </p>
               </div>
             </div>
